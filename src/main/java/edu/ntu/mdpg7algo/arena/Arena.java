@@ -10,14 +10,19 @@ public class Arena {
     public static final int NUM_ROWS = 20;
     public static final int NUM_COLS = 20;
     private Obstacle[][] obstacles;
-
-    public Arena(ArrayList<Obstacle> obstacles) {
+    private Robot robot;
+    
+    public void setObstacles(ArrayList<Obstacle> obstacles) {
         this.obstacles = new Obstacle[NUM_ROWS][NUM_COLS];
         for (Obstacle obstacle : obstacles) {
             this.obstacles[obstacle.getX()][obstacle.getY()] = obstacle;
         }
     }
-
+    
+    public void setObstacles(Obstacle[][] obstacles) {
+        this.obstacles = obstacles;
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
