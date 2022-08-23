@@ -8,6 +8,7 @@ public class Obstacle {
     private int x;
     private int y;
     private Dir dir;
+    
     public Obstacle(int x, int y, Dir dir) {
         this.x = x;
         this.y = y;
