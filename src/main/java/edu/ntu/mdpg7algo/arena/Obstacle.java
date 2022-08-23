@@ -1,5 +1,8 @@
 package edu.ntu.mdpg7algo.arena;
 
+import lombok.Data;
+
+@Data
 public class Obstacle {
     private int _xCord;
     private int _yCord;
@@ -12,28 +15,8 @@ public class Obstacle {
         this.direction = direction;
     }
 
-
-    public int get_xCord() {
-        return _xCord;
-    }
-
-    public void set_xCord(int _xCord) {
-        this._xCord = _xCord;
-    }
-
-    public int get_yCord() {
-        return _yCord;
-    }
-
-    public void set_yCord(int _yCord) {
-        this._yCord = _yCord;
-    }
-
-    public Directions getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Directions direction) {
-        this.direction = direction;
+    @Override
+    public String toString(){
+        return ("xCord: "+this._xCord + " yCord: " + this._yCord + " direction: "+this.direction);
     }
 }

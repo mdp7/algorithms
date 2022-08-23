@@ -17,5 +17,9 @@ public class Test {
         Arena arena = new Arena(obstacles);
 
         arena.printArena();
+        for(Obstacle o : arena.getObstacles()){
+            System.out.println(o.toString());
+        }
+
     }
 }
