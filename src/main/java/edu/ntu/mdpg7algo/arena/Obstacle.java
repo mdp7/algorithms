@@ -4,19 +4,35 @@ import lombok.Data;
 
 @Data
 public class Obstacle {
-    private int _xCord;
-    private int _yCord;
-
-    private Directions direction;
-
-    public Obstacle(int _xCord, int _yCord, Directions direction) {
-        this._xCord = _xCord;
-        this._yCord = _yCord;
-        this.direction = direction;
+    
+    public enum Dir {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT;
+        
+        public String toSymbol() {
+            return switch (this) {
+                case UP -> "^";
+                case DOWN -> "v";
+                case LEFT -> "<";
+                case RIGHT -> ">";
+            };
+        }
+    }
+    
+    private int x;
+    private int y;
+    private Dir dir;
+    
+    public Obstacle(int x, int y, Dir dir) {
+        this.x = x;
+        this.y = y;
+        this.dir = dir;
     }
 
     @Override
-    public String toString(){
-        return ("xCord: "+this._xCord + " yCord: " + this._yCord + " direction: "+this.direction);
+    public String toString() {
+        return ("x: " + this.x + " y: " + this.y + " dir: " + this.dir);
     }
 }
