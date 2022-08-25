@@ -4,7 +4,7 @@ import edu.ntu.mdpg7algo.visualization.ArenaPanel;
 
 import javax.swing.*;
 
-public class App {
+public class Simulator {
     public static void main(String[] args) {
         JFrame frame = new JFrame("MDP Group7 Path Finding Visualization Tool");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
