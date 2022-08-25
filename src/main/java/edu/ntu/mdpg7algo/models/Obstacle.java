@@ -30,7 +30,7 @@ public class Obstacle {
 
 
     public enum Dir {
-        UP(Math.PI/2), DOWN((3*Math.PI)/4), LEFT(Math.PI), RIGHT(0);
+        UP(Math.PI/2), DOWN(-Math.PI/2), LEFT(Math.PI), RIGHT(0);
 
         public final double theta;
 
