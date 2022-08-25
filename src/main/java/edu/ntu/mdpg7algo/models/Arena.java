@@ -9,19 +9,22 @@ public class Arena {
     
     public static final int NUM_ROWS = 20;
     public static final int NUM_COLS = 20;
-    private Obstacle[][] obstacles;
+    private Obstacle[][] obstaclesMatrix;
+
+    private ArrayList<Obstacle> obstacles;
     private Robot robot;
     
     public void setObstacles(ArrayList<Obstacle> obstacles) {
-        this.obstacles = new Obstacle[NUM_ROWS][NUM_COLS];
+        this.obstaclesMatrix = new Obstacle[NUM_ROWS][NUM_COLS];
         for (Obstacle obstacle : obstacles) {
-            this.obstacles[obstacle.getX()][obstacle.getY()] = obstacle;
+            this.obstaclesMatrix[(int)obstacle.getPosition().getX()][(int)obstacle.getPosition().getY()] = obstacle;
         }
-    }
-    
-    public void setObstacles(Obstacle[][] obstacles) {
         this.obstacles = obstacles;
     }
+    
+//    public void setObstacles(Obstacle[][] obstacles) {
+//        this.obstacles = obstacles;
+//    }
     
     @Override
     public String toString() {
@@ -29,7 +32,7 @@ public class Arena {
         for (int i = 0; i < NUM_ROWS; i++) {
             sb.append("|");
             for (int j = 0; j < NUM_COLS; j++) {
-                sb.append(obstacles[i][j] == null ? " " : obstacles[i][j].getDir().toSymbol()).append("|");
+                sb.append(obstaclesMatrix[i][j] == null ? " " : obstaclesMatrix[i][j].getDir().toSymbol()).append("|");
             }
             sb.append("\n");
         }
