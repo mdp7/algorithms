@@ -1,4 +1,4 @@
-package edu.ntu.mdpg7algo.arena;
+package edu.ntu.mdpg7algo.models;
 
 import lombok.Data;
 

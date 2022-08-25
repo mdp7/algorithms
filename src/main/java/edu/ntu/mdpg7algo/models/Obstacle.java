@@ -1,4 +1,4 @@
-package edu.ntu.mdpg7algo.arena;
+package edu.ntu.mdpg7algo.models;
 
 import lombok.Data;
 
@@ -8,11 +8,20 @@ public class Obstacle {
     private int x;
     private int y;
     private Dir dir;
-    
+    private boolean detected;
+
     public Obstacle(int x, int y, Dir dir) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.detected = false;
+    }
+
+    public Obstacle(int x, int y, Dir dir, boolean detected) {
+        this.x = x;
+        this.y = y;
+        this.dir = dir;
+        this.detected = detected;
     }
     
     @Override
