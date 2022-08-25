@@ -20,6 +20,8 @@ public class Position {
     public void move(double delX, double delY, double delTheta) {
         move(delX, delY);
         theta += delTheta;
+        if(theta > Math.PI) theta -= 2*Math.PI;
+        else if (theta < -Math.PI) theta += 2*Math.PI;
     }
 
     public void place(double x, double y, double theta) {
