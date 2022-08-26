@@ -36,6 +36,11 @@ public class OptimalPathPlanner {
     private Path computeShortestPath(Position start, Position end, String pathType){
         switch (pathType){
             case "S":
+                return computeStraightPath(start, end);
+            case "L":
+                return computeLeftPath(start, end);
+            case "R":
+                return computeRightPath(start, end);
         }
 
 
@@ -43,6 +48,9 @@ public class OptimalPathPlanner {
     }
 
 
+//    Calculation of paths
+
+//    Single segment
     private Path computeStraightPath(Position start, Position end){
 //        Check if start and end theta is diff. If diff, then it is not possible
 //        Hm..In real word, it may not need to be exactly same theta for straight line to be the best move. Need a range of theta
@@ -89,9 +97,28 @@ public class OptimalPathPlanner {
         ArrayList<Move> moves = new ArrayList<Move>();
         moves.add(new Move(Move.Dir.R, arcLen));
         return new Path(moves);
+    }
+
+/*
+Double segment - Has to determine ONE intermediate position of the robot
+*/
+    private Path computeSRPath(Position start, Position end){
+//        Check if possible
+
+//        Find intermediate position
+
+//        Compute moves
 
     }
 
+
+/*
+Triple segment - Has to determine TWO intermediate position
+*/
+
+
+
+//    Finding vectors
 
     private Vector findCentreRight(Position p1){
         double circleTheta = p1.getTheta() - Math.PI/2;
@@ -110,6 +137,8 @@ public class OptimalPathPlanner {
         return new Vector(circleX, circleY);
     }
 
+
+//    Basic calculations of distance and angle
     private double calculateArcLength(double angle){
         return Math.abs(angle * RADIUS);
     }

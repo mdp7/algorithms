@@ -24,7 +24,7 @@ public class Greedy {
     private void computePossiblePaths(){
         ArrayList<Obstacle> obstacles = arena.getObstacles();
         for(Obstacle o : obstacles){
-            possiblePaths.add(optimalPathPlanner.getOptimalPath(arena.getRobot().getPosition(), o.getPosition()));
+            possiblePaths.add(optimalPathPlanner.getOptimalPath(arena.getRobot().getPosition(), o.computeRobotPosition()));
         }
     }
 
