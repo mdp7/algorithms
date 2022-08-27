@@ -10,6 +10,13 @@ public class Vector {
 
         return new Vector(_x, _y);
     }
+
+    public static Vector getMiddlePointVector(Vector v1, Vector v2){
+        double x = (v1.getX() + v2.getX())/2;
+        double y = (v1.getY() + v2.getY())/2;
+
+        return new Vector(x, y);
+    }
     public static double calculateAngle(Vector V1, Vector V2, boolean isRightTurn){
         double angle = Math.atan2(V2.getY(), V2.getX()) - Math.atan2(V1.getY(), V1.getX());
         if(isRightTurn && angle > 0){
@@ -36,6 +43,5 @@ public class Vector {
     public double getLength(){
         double distance = Math.hypot(Math.abs(this.x), Math.abs(this.y));
         return distance;
-
     }
 }

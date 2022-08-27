@@ -13,10 +13,6 @@ To determine what move to do, it is dependent on 2(?) factors (not taking into a
 (Robot Start Dir, Robot End Dir), Possible Moves
 (UP, RIGHT) - [L, LS, R, SR, RS, LR, RLR]
 
-
-
-
-
 */
 
 public class OptimalPathPlanner {
@@ -46,23 +42,59 @@ public class OptimalPathPlanner {
     }
 
     private Path computeShortestPath(Position start, Position end, String pathType){
-        switch (pathType){
-            case "S":
-                return computeStraightPath(start, end);
-            case "L":
-                return computeLeftPath(start, end);
-            case "R":
-                return computeRightPath(start, end);
-        }
+       return switch (pathType){
+            case "S" ->
+                computeStraightPath(start, end);
 
+            case "L" ->
+                computeLeftPath(start, end);
 
-        return new Path();
+            case "R"->
+                computeRightPath(start, end);
+
+            case "SR"->
+                computeSRPath(start, end);
+
+            case "SL"->
+                 computeSLPath(start, end);
+
+            case "RL"->
+                 computeRLPath(start, end);
+
+            case "LR"->
+                 computeLRPath(start, end);
+
+            case "LS"->
+                 computeLSPath(start, end);
+
+            case "RS"->
+                 computeRSPath(start, end);
+
+            case "RSR"->
+                 computeRSRPath(start, end);
+
+            case "LSL"->
+                 computeLSLPath(start, end);
+
+            case "LSR"->
+                 computeLSRPath(start, end);
+
+            case "RSL"->
+                 computeRSLPath(start, end);
+
+            case "LRL"->
+                    computeLRLPath(start, end);
+
+            case "RLR"->
+                 computeRLRPath(start, end);
+        };
+
     }
 
 
 //    Calculation of paths
 
-//    Single segment
+//    Single segment - "S", "R", "L",
     private Path computeStraightPath(Position start, Position end){
 //        Check if start and end theta is diff. If diff, then it is not possible
 //        Hm..In real word, it may not need to be exactly same theta for straight line to be the best move. Need a range of theta
@@ -113,10 +145,11 @@ public class OptimalPathPlanner {
 
 /*
 Double segment - Has to determine ONE intermediate position of the robot
+"SR", "SL", "RL", "LR", "LS", "RS",
 */
     private Path computeSRPath(Position start, Position end){
 
-    // Check if possible - TO DO
+    // Check if possible - TODO
 
         /*
         Find intermediate position by:
@@ -159,7 +192,7 @@ Double segment - Has to determine ONE intermediate position of the robot
 
         double factor = RADIUS/v2.getLength();
 
-        Position intermediatePos = new Position(start.getX() + factor * v2.getX(), start.getY() + factor * v2.getY(), end.getTheta());
+        Position intermediatePos = new Position(c1.getX() + factor * v2.getX(), c1.getY() + factor * v2.getY(), end.getTheta());
         /*
         Compute moves
         Straight distance + Arclen of Right move
@@ -185,9 +218,6 @@ Double segment - Has to determine ONE intermediate position of the robot
         Vector c1 = findCentreLeft(start);
         Vector c2 = findCentreLeft(end);
         Vector v1 = new Vector(c1, c2);
-        Vector v2 = Vector.vectorRotateCounterClockwise(v1, Math.PI/2);
-
-        double factor = RADIUS/v2.getLength();
 
         Position intermediatePos = new Position(start.getX() + v1.getX(), start.getY() + v1.getY(), start.getTheta());
         /*
@@ -221,7 +251,7 @@ Double segment - Has to determine ONE intermediate position of the robot
 
         double factor = RADIUS/v2.getLength();
 
-        Position intermediatePos = new Position(start.getX() + factor * v2.getX(), start.getY() + factor * v2.getY(), end.getTheta());
+        Position intermediatePos = new Position(c1.getX() + factor * v2.getX(), c1.getY() + factor * v2.getY(), end.getTheta());
         /*
         Compute moves
         Straight distance + Arclen of Right move
@@ -246,12 +276,16 @@ Double segment - Has to determine ONE intermediate position of the robot
         Vector c1 = findCentreRight(start);
         Vector c2 = findCentreLeft(end);
         Vector v1 = new Vector(c1, c2);
+        Vector c1ToStart = new Vector(c1, new Vector(start.getX(), start.getY()));
+
+//
 
         double factor = 0.5;
 
-        double angle = Vector.calculateAngle(c1, v1, true);
+        double angle = Vector.calculateAngle(c1ToStart, v1, true);
+        double newTheta = start.getTheta() - angle;
 
-        Position intermediatePos = new Position(start.getX() + factor * v1.getX(), start.getY() + factor * v1.getY(), angle);
+        Position intermediatePos = new Position(c1.getX() + factor * v1.getX(), c1.getY() + factor * v1.getY(), newTheta);
         /*
         Compute moves
         Straight distance + Arclen of Right move
@@ -276,12 +310,13 @@ Double segment - Has to determine ONE intermediate position of the robot
         Vector c1 = findCentreLeft(start);
         Vector c2 = findCentreRight(end);
         Vector v1 = new Vector(c1, c2);
-
+        Vector c1ToStart = new Vector(c1, new Vector(start.getX(), start.getY()));
         double factor = 0.5;
 
-        double angle = Vector.calculateAngle(c1, v1, false);
+        double angle = Vector.calculateAngle(c1ToStart, v1, false);
+        double newTheta = start.getTheta() + angle;
 
-        Position intermediatePos = new Position(start.getX() + factor * v1.getX(), start.getY() + factor * v1.getY(), angle);
+        Position intermediatePos = new Position(c1.getX() + factor * v1.getX(), c1.getY() + factor * v1.getY(), newTheta);
         /*
         Compute moves
         Straight distance + Arclen of Right move
@@ -298,7 +333,211 @@ Double segment - Has to determine ONE intermediate position of the robot
 
 /*
 Triple segment - Has to determine TWO intermediate position
+"RSR", "LSL", "LSR", "RSL", "LRL", "RLR"
+Start -> Inter_1 -> Inter_2 -> End
 */
+    private Path computeRSRPath(Position start, Position end){
+//        Check if possible - TODO
+
+//        If possible
+//        Centre of circles
+        Vector c1  = findCentreRight(start);
+        Vector c2 = findCentreRight(end);
+
+//        Vectors to aid in finding intermediate
+        Vector v1 = new Vector(c1, c2);
+        Vector v2 = Vector.vectorRotateCounterClockwise(v1, Math.PI/2);
+        double factor = RADIUS / v2.getLength();
+
+        Vector c1ToStart = new Vector(c1, new Vector(start.getX(), start.getY()));
+
+        double interX = c1.getX() + v2.getX()*factor;
+        double interY = c1.getY() + v2.getY()*factor;
+//        Angle of turn
+        double angle = Vector.calculateAngle(c1ToStart, v2, true);
+        double newTheta = start.getTheta() - angle;
+
+        Position intermediatePos = new Position(interX, interY, newTheta);
+
+        Path path1 = computeRightPath(start, intermediatePos);
+        Path path2 = computeSRPath(intermediatePos, end);
+
+        Path[] paths = {path1, path2};
+        return new Path(paths);
+    }
+
+
+    private Path computeRSLPath(Position start, Position end){
+        //        Check if possible - TODO
+        //        If possible
+//        Centre of circles
+        Vector c1  = findCentreRight(start);
+        Vector c2 = findCentreLeft(end);
+
+//        Vectors to aid in finding intermediate
+        Vector v1 = new Vector(c1, c2);
+
+        double angleOfRotation = Math.acos(2 * RADIUS/v1.getLength());
+        Vector v2 = Vector.vectorRotateCounterClockwise(v1, angleOfRotation);
+        double factor = RADIUS * v2.getLength();
+
+        Vector c1ToStart = new Vector(c1, new Vector(start.getX(), start.getY()));
+//        Angle of turn
+        double angle = Vector.calculateAngle(c1ToStart, v2, true);
+        double newTheta = start.getTheta() - angle;
+
+        double interX = c1.getX() + v2.getX()*factor;
+        double interY = c1.getY() + v2.getY()*factor;
+
+        Position intermediatePos = new Position(interX, interY, newTheta);
+
+        Path path1 = computeRightPath(start, intermediatePos);
+        Path path2 = computeSLPath(intermediatePos, end);
+
+        Path[] paths = {path1, path2};
+        return new Path(paths);
+
+    }
+
+    private Path computeLSRPath(Position start, Position end){
+        //        Check if possible - TODO
+        //        If possible
+//        Centre of circles
+        Vector c1  = findCentreLeft(start);
+        Vector c2 = findCentreRight(end);
+
+//        Vectors to aid in finding intermediate
+        Vector v1 = new Vector(c1, c2);
+
+//        To account for counter-clockwise rotation, take -angle
+        double angleOfRotation = Math.acos(2 * RADIUS/v1.getLength());
+        Vector v2 = Vector.vectorRotateCounterClockwise(v1, -angleOfRotation);
+        double factor = RADIUS * v2.getLength();
+
+        Vector c1ToStart = new Vector(c1, new Vector(start.getX(), start.getY()));
+//        Angle of turn
+        double angle = Vector.calculateAngle(c1ToStart, v2, false);
+        double newTheta = start.getTheta() + angle;
+
+        double interX = c1.getX() + v2.getX()*factor;
+        double interY = c1.getY() + v2.getY()*factor;
+
+        Position intermediatePos = new Position(interX, interY, newTheta);
+
+        Path path1 = computeLeftPath(start, intermediatePos);
+        Path path2 = computeSRPath(intermediatePos, end);
+
+        Path[] paths = {path1, path2};
+        return new Path(paths);
+
+    }
+
+    private Path computeLSLPath(Position start, Position end){
+        //        Check if possible - TODO
+        //        If possible
+//        Centre of circles
+        Vector c1  = findCentreLeft(start);
+        Vector c2 = findCentreLeft(end);
+
+//        Vectors to aid in finding intermediate
+        Vector v1 = new Vector(c1, c2);
+        Vector v2 = Vector.vectorRotateCounterClockwise(v1, -Math.PI/2);
+        double factor = RADIUS / v2.getLength();
+
+        Vector c1ToStart = new Vector(c1, new Vector(start.getX(), start.getY()));
+
+        double interX = c1.getX() + v2.getX()*factor;
+        double interY = c1.getY() + v2.getY()*factor;
+//        Angle of turn
+        double angle = Vector.calculateAngle(c1ToStart, v2, false);
+        double newTheta = start.getTheta() + angle;
+
+        Position intermediatePos = new Position(interX, interY, newTheta);
+
+        Path path1 = computeLeftPath(start, intermediatePos);
+        Path path2 = computeSLPath(intermediatePos, end);
+
+        Path[] paths = {path1, path2};
+        return new Path(paths);
+
+    }
+
+    private Path computeRLRPath(Position start, Position end){
+        //        Check if possible - TODO
+
+//        Centre of circles
+        Vector c1  = findCentreRight(start);
+        Vector c2 = findCentreRight(end);
+
+//        Vectors to aid in finding intermediate
+        Vector v1 = new Vector(c1, c2);
+        Vector v2 = Vector.vectorRotateCounterClockwise(v1, -Math.PI/2);
+
+        Vector middle = Vector.getMiddlePointVector(c1, c2);
+
+        double distanceMiddleToP3 = Math.sqrt( Math.pow((2*RADIUS), 2) - Math.pow((v1.getLength()/2), 2));
+        double factor = distanceMiddleToP3 / v2.getLength();
+
+        double p3X = middle.getX() + factor * v2.getX();
+        double p3Y = middle.getY() + factor * v2.getY();
+
+        Vector p3 = new Vector(p3X, p3Y);
+
+        Vector intermediateVector = Vector.getMiddlePointVector(c1, p3);
+
+
+//        Angle of turn
+        Vector c1Top3 = new Vector(c1, p3);
+        Vector c1ToStart = new Vector(c1, new Vector(start.getX(), start.getY()));
+        double angle = Vector.calculateAngle(c1Top3, c1ToStart, false);
+        double newTheta = start.getTheta() - angle;
+
+        Position intermediatePos = new Position(intermediateVector.getX(), intermediateVector.getY(), newTheta);
+
+        Path path1 = computeRightPath(start, intermediatePos);
+        Path path2 = computeLRPath(intermediatePos, end);
+
+        Path[] paths = {path1, path2};
+        return new Path(paths);
+    }
+
+    private Path computeLRLPath(Position start, Position end){
+        //        Check if possible - TODO
+        //        Centre of circles
+        Vector c1  = findCentreLeft(start);
+        Vector c2 = findCentreLeft(end);
+
+//        Vectors to aid in finding intermediate
+        Vector v1 = new Vector(c1, c2);
+        Vector v2 = Vector.vectorRotateCounterClockwise(v1, Math.PI/2);
+
+        Vector middle = Vector.getMiddlePointVector(c1, c2);
+
+        double distanceMiddleToP3 = Math.sqrt( Math.pow((2*RADIUS), 2) - Math.pow((v1.getLength()/2), 2));
+        double factor = distanceMiddleToP3 / v2.getLength();
+
+        double p3X = middle.getX() + factor * v2.getX();
+        double p3Y = middle.getY() + factor * v2.getY();
+
+        Vector p3 = new Vector(p3X, p3Y);
+
+        Vector intermediateVector = Vector.getMiddlePointVector(c1, p3);
+
+
+//        Angle of turn
+        Vector c1Top3 = new Vector(c1, p3);
+        Vector c1ToStart = new Vector(c1, new Vector(start.getX(), start.getY()));
+        double angle = Vector.calculateAngle(c1Top3, c1ToStart, false);
+        double newTheta = start.getTheta() + angle;
+
+        Position intermediatePos = new Position(intermediateVector.getX(), intermediateVector.getY(), newTheta);
+
+        Path path1 = computeLeftPath(start, intermediatePos);
+        Path path2 = computeRLPath(intermediatePos, end);
+
+        Path[] paths = {path1, path2};
+        return new Path(paths);
+    }
 
 
 

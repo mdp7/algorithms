@@ -10,6 +10,7 @@ public class Position {
         this.x = x;
         this.y = y;
         this.theta = theta;
+        computeTheta();
     }
 
     public void move(double delX, double delY) {
@@ -20,13 +21,17 @@ public class Position {
     public void move(double delX, double delY, double delTheta) {
         move(delX, delY);
         theta += delTheta;
-        if(theta > Math.PI) theta -= 2*Math.PI;
-        else if (theta < -Math.PI) theta += 2*Math.PI;
+        computeTheta();
     }
 
     public void place(double x, double y, double theta) {
         this.x = x;
         this.y = y;
         this.theta = theta;
+    }
+
+    private void computeTheta(){
+        while(theta > Math.PI) theta -= 2*Math.PI;
+        while(theta <=  -Math.PI) theta += 2*Math.PI;
     }
 }
