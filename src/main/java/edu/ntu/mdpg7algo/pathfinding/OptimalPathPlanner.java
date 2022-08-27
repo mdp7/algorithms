@@ -7,6 +7,18 @@ import edu.ntu.mdpg7algo.models.Vector;
 
 import java.util.ArrayList;
 
+/*
+Possible way to speed up pathfinding?
+To determine what move to do, it is dependent on 2(?) factors (not taking into account constraints such as walls, hitting obstacles etc):
+(Robot Start Dir, Robot End Dir), Possible Moves
+(UP, RIGHT) - [L, LS, R, SR, RS, LR, RLR]
+
+
+
+
+
+*/
+
 public class OptimalPathPlanner {
 //    radius from centre  of robot to imaginary circle
     public static double RADIUS = 3.5;
@@ -103,7 +115,9 @@ public class OptimalPathPlanner {
 Double segment - Has to determine ONE intermediate position of the robot
 */
     private Path computeSRPath(Position start, Position end){
+
 //        Check if possible
+
 
 //        Find intermediate position
 
@@ -123,7 +137,7 @@ Triple segment - Has to determine TWO intermediate position
     private Vector findCentreRight(Position p1){
         double circleTheta = p1.getTheta() - Math.PI/2;
         double circleY = p1.getY() + Math.sin(circleTheta) * RADIUS;
-        double circleX = p1.getX() + Math.sin(circleTheta) * RADIUS;
+        double circleX = p1.getX() + Math.cos(circleTheta) * RADIUS;
 //      Returning position seems erroneous since this is a point. Should we create a new class?
         return new Vector(circleX, circleY);
     }
@@ -132,7 +146,7 @@ Triple segment - Has to determine TWO intermediate position
     private Vector findCentreLeft(Position p1){
         double circleTheta = p1.getTheta() + Math.PI/2;
         double circleY = p1.getY() + Math.sin(circleTheta) * RADIUS;
-        double circleX = p1.getX() + Math.sin(circleTheta) * RADIUS;
+        double circleX = p1.getX() + Math.cos(circleTheta) * RADIUS;
 //      Returning position seems erroneous since this is a point. Should we create a new class?
         return new Vector(circleX, circleY);
     }
