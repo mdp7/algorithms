@@ -4,52 +4,58 @@ import lombok.Data;
 
 @Data
 public class Obstacle {
-    private final double robotOffset = 8;
-    
-    private Position position;
-    private Dir dir;
+
+    private final double ROBOT_OFFSET = 8;  // distance the robot needs to be away from the obstacle
+
     private boolean detected;
+    private int colX, colY;  // grid location of the obstacle
+    private Facing facing;
 
-    public Obstacle(double x, double y, Dir dir) {
-        this.position = new Position(x, y, dir.theta);
-        this.dir = dir;
-
-        this.detected = false;
+    public Obstacle(int colX, int colY, Facing facing) {
+        this(colX, colY, facing, false);
     }
 
-    public Obstacle(int x, int y, Dir dir, boolean detected) {
-        this.position = new Position(x, y, dir.theta);
-        this.dir = dir;
+    public Obstacle(int colX, int colY, Facing facing, boolean detected) {
+        this.colX = colX;
+        this.colY = colY;
+        this.facing = facing;
         this.detected = detected;
     }
 
+    /**
+     * Computes the x position of the obstacle center in cm
+     */
+    public double getX() {
+        return (colX + 0.5) * Arena.CELL_WIDTH;
+    }
 
-    public Position computeRobotPosition(){
-        return switch (this.dir){
-            case UP -> new Position(position.getX(), position.getY() + robotOffset, dir.DOWN.theta);
-            case DOWN -> new Position(position.getX(), position.getY() - robotOffset, dir.UP.theta);
-            case LEFT -> new Position(position.getX()  - robotOffset, position.getY(), dir.RIGHT.theta);
-            case RIGHT -> new Position(position.getX()  + robotOffset, position.getY(), dir.LEFT.theta);
+    /**
+     * Computes the y position of the obstacle center in cm
+     */
+    public double getY() {
+        return (colY + 0.5) * Arena.CELL_HEIGHT;
+    }
+
+    public Position computeRobotPosition() {
+        return switch (this.facing) {
+            case UP -> new Position(getX(), getY() + ROBOT_OFFSET, -Math.PI / 2);
+            case DOWN -> new Position(getX(), getY() - ROBOT_OFFSET, Math.PI / 2);
+            case LEFT -> new Position(getX() - ROBOT_OFFSET, getY(), 0);
+            case RIGHT -> new Position(getX() + ROBOT_OFFSET, getY(), Math.PI);
         };
     }
 
-
     @Override
     public String toString() {
-        return ("x: " + this.position.getX() + " y: " + this.position.getY() + " dir: " + this.dir);
+        return ("x: " + getColX() + " y: " + getColY() + " dir: " + this.facing);
     }
 
+    public enum Facing {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT;
 
-
-    public enum Dir {
-        UP(Math.PI/2), DOWN(-Math.PI/2), LEFT(Math.PI), RIGHT(0);
-
-        public final double theta;
-
-        private Dir(double theta){
-            this.theta = theta;
-        }
-        
         public String toSymbol() {
             return switch (this) {
                 case UP -> "^";

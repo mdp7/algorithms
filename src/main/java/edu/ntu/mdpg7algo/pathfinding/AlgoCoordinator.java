@@ -5,6 +5,7 @@ import edu.ntu.mdpg7algo.models.Move;
 import lombok.Data;
 
 import java.util.ArrayList;
+
 @Data
 public class AlgoCoordinator {
 
@@ -16,7 +17,7 @@ public class AlgoCoordinator {
         this.arena = arena;
     }
 
-    public ArrayList<Move> getNextMoves(){
+    public ArrayList<Move> getNextMoves() {
         return greedySearch.getOptimalMoves();
     }
 }

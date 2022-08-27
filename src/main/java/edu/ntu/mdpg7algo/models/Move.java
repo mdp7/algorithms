@@ -2,20 +2,23 @@ package edu.ntu.mdpg7algo.models;
 
 import lombok.Data;
 
+/**
+ * Defines robot movement, with wheel direction and distance to travel
+ */
 @Data
 public class Move {
 
-    private Dir dir;
+    private MoveDir moveDir;
     private double distance;
 
-    public Move(Dir dir, double distance) {
-        this.dir = dir;
+    public Move(MoveDir moveDir, double distance) {
+        this.moveDir = moveDir;
         this.distance = distance;
     }
 
-    public enum Dir {
+    public enum MoveDir {
         R,
         S,
-        L;
+        L
     }
 }

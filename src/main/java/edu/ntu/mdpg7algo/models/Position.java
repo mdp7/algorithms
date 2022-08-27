@@ -2,6 +2,9 @@ package edu.ntu.mdpg7algo.models;
 
 import lombok.Data;
 
+/**
+ * Robot position
+ */
 @Data
 public class Position {
     private double x, y, theta;
@@ -30,8 +33,11 @@ public class Position {
         this.theta = theta;
     }
 
-    private void computeTheta(){
-        while(theta > Math.PI) theta -= 2*Math.PI;
-        while(theta <=  -Math.PI) theta += 2*Math.PI;
+    /**
+     * Normalize theta to a fixed range of (-PI, PI]
+     */
+    private void computeTheta() {
+        while (theta > Math.PI) theta -= 2 * Math.PI;
+        while (theta <= -Math.PI) theta += 2 * Math.PI;
     }
 }
