@@ -16,9 +16,17 @@ public class Path {
 
     }
 
+    public Path(Path[] paths){
+        this.totalDistance = 0;
+        for(Path path : paths){
+            moves.addAll(path.getMoves());
+            totalDistance += path.getTotalDistance();
+        }
+
+    }
+
     public Path(){
         this.moves = new ArrayList<Move>();
         this.totalDistance = 0;
     }
-
 }
