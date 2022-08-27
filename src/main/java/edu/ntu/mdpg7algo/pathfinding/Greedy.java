@@ -24,7 +24,9 @@ public class Greedy {
     private void computePossiblePaths(){
         ArrayList<Obstacle> obstacles = arena.getObstacles();
         for(Obstacle o : obstacles){
-            possiblePaths.add(optimalPathPlanner.getOptimalPath(arena.getRobot().getPosition(), o.computeRobotPosition()));
+            if(!o.isDetected()){
+                possiblePaths.add(optimalPathPlanner.getOptimalPath(arena.getRobot().getPosition(), o.computeRobotPosition()));
+            }
         }
     }
 
@@ -35,8 +37,6 @@ public class Greedy {
 
 //        Check through all paths robot can make to get to its destination
         for(Path path: possiblePaths){
-//            Calculate distance of this path
-
             if(path.getTotalDistance() < minDistance){
                 minDistance = path.getTotalDistance();
                 shortestMoves = path.getMoves();

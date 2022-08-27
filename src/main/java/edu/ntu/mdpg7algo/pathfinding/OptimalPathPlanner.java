@@ -576,14 +576,6 @@ Start -> Inter_1 -> Inter_2 -> End
         return distance;
     }
 
-    private double calculateStraightDistance(Vector start, Vector end){
-        // Calulate distance via hypot
-        double delY = Math.abs(start.getY() - end.getY());
-        double delX = Math.abs(start.getX() - end.getX());
-        double distance = Math.hypot(delX, delY);
-        return distance;
-    }
-
 
     //    For Vector
     private double calculateStraightDistance(Position start, Vector end){
