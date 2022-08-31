@@ -119,3 +119,5 @@ buildNumber.properties
 
 # File-based project format
 *.iml
+
+.DS_Store

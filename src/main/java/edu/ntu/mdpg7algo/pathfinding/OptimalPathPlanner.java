@@ -72,6 +72,8 @@ public class OptimalPathPlanner {
             case "LRL" -> computeLRLPath(start, end);
 
             case "RLR" -> computeRLRPath(start, end);
+
+            default -> new Path();
         };
 
     }

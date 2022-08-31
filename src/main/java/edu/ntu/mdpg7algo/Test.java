@@ -1,9 +1,9 @@
 package edu.ntu.mdpg7algo;
 
 import edu.ntu.mdpg7algo.models.Arena;
+import edu.ntu.mdpg7algo.models.Car;
 import edu.ntu.mdpg7algo.models.Obstacle;
 import edu.ntu.mdpg7algo.models.Position;
-import edu.ntu.mdpg7algo.models.Robot;
 
 import java.util.ArrayList;
 
@@ -18,11 +18,11 @@ public class Test {
         obstacles.add(new Obstacle(5, 10, Obstacle.Facing.RIGHT));
         obstacles.add(new Obstacle(19, 19, Obstacle.Facing.DOWN));
 
-        Robot robot = new Robot(new Position(107.2, 99.1, 182));
+        Car car = new Car(new Position(107.2, 99.1, 182));
 
         Arena arena = new Arena();
         arena.setObstacles(obstacles);
-        arena.setRobot(robot);
+        arena.setCar(car);
         System.out.println(arena);
     }
 }

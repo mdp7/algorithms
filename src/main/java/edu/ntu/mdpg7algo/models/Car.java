@@ -3,15 +3,15 @@ package edu.ntu.mdpg7algo.models;
 import lombok.Data;
 
 @Data
-public class Robot {
+public class Car {
 
     private Position position;
 
-    public Robot(double x, double y, double theta) {
+    public Car(double x, double y, double theta) {
         this.position = new Position(x, y, theta);
     }
 
-    public Robot(Position position) {
+    public Car(Position position) {
         this.position = position;
     }
 

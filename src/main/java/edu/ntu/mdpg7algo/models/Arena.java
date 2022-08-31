@@ -16,7 +16,7 @@ public class Arena {
     public static final int CELL_HEIGHT = 20;
     private ArrayList<Obstacle> obstacles;
     private Obstacle[][] obstaclesMatrix;  // stores the obstacle at corresponding grids
-    private Robot robot;
+    private Car car;
 
     public Arena() {
         obstacles = new ArrayList<>();
