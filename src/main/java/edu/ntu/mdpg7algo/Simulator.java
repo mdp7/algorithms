@@ -19,7 +19,7 @@ public class Simulator extends JFrame {
         super(title);
 
         arena = new Arena();
-        arena.addObstacle(new Obstacle(8, 11, Obstacle.Facing.DOWN));
+        arena.addObstacle(new Obstacle(8, 11, Obstacle.Facing.DOWN, Obstacle.ObstacleImage.A));
         arena.setCar(new Car(15, 15, Math.PI / 2));
         arenaPanel = new ArenaPanel(30, 30, 30, 30, arena);
 

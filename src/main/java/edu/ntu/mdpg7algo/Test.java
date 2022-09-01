@@ -13,10 +13,10 @@ import java.util.ArrayList;
 public class Test {
     public static void main(String[] args) {
         ArrayList<Obstacle> obstacles = new ArrayList<>();
-        obstacles.add(new Obstacle(0, 0, Obstacle.Facing.UP));
-        obstacles.add(new Obstacle(5, 5, Obstacle.Facing.LEFT));
-        obstacles.add(new Obstacle(5, 10, Obstacle.Facing.RIGHT));
-        obstacles.add(new Obstacle(19, 19, Obstacle.Facing.DOWN));
+//        obstacles.add(new Obstacle(0, 0, Obstacle.Facing.UP));
+//        obstacles.add(new Obstacle(5, 5, Obstacle.Facing.LEFT));
+//        obstacles.add(new Obstacle(5, 10, Obstacle.Facing.RIGHT));
+//        obstacles.add(new Obstacle(19, 19, Obstacle.Facing.DOWN));
 
         Car car = new Car(new Position(107.2, 99.1, 182));
 

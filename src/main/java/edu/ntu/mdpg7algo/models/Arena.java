@@ -12,10 +12,10 @@ public class Arena {
 
     public static final int NUM_ROWS = 20;
     public static final int NUM_COLS = 20;
-    public static final int CELL_WIDTH = 20;
-    public static final int CELL_HEIGHT = 20;
+    public static final int CELL_WIDTH = 20;  // absolute cell width in centimeters
+    public static final int CELL_HEIGHT = 20;  // absolute cell height in centimeters
     private ArrayList<Obstacle> obstacles;
-    private Obstacle[][] obstaclesMatrix;  // stores the obstacle at corresponding grids
+    private Obstacle[][] obstaclesMatrix;  // stores the obstacle at corresponding grids [y][x]
     private Car car;
 
     public Arena() {
@@ -34,6 +34,14 @@ public class Arena {
     public void addObstacle(Obstacle obstacle) {
         obstacles.add(obstacle);
         obstaclesMatrix[obstacle.getCellY()][obstacle.getCellX()] = obstacle;
+    }
+
+    public void removeObstacle(int cellX, int cellY) {
+        Obstacle obstacle = obstaclesMatrix[cellY][cellX];
+        obstaclesMatrix[cellY][cellX] = null;
+        if (obstacle != null) {
+            obstacles.remove(obstacle);
+        }
     }
 
     @Override

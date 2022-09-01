@@ -10,15 +10,17 @@ public class Obstacle {
     private boolean detected;
     private int cellX, cellY;  // cell location of the obstacle
     private Facing facing;
+    private ObstacleImage obstacleImage;
 
-    public Obstacle(int cellX, int cellY, Facing facing) {
-        this(cellX, cellY, facing, false);
+    public Obstacle(int cellX, int cellY, Facing facing, ObstacleImage obstacleImage) {
+        this(cellX, cellY, facing, obstacleImage, false);
     }
 
-    public Obstacle(int cellX, int cellY, Facing facing, boolean detected) {
+    public Obstacle(int cellX, int cellY, Facing facing, ObstacleImage obstacleImage, boolean detected) {
         this.cellX = cellX;
         this.cellY = cellY;
         this.facing = facing;
+        this.obstacleImage = obstacleImage;
         this.detected = detected;
     }
 
@@ -64,5 +66,38 @@ public class Obstacle {
                 case RIGHT -> ">";
             };
         }
+    }
+
+    public enum ObstacleImage {
+        A,
+        B,
+        C,
+        CIRCLE,
+        D,
+        DOWN,
+        E,
+        EIGHT,
+        F,
+        FIVE,
+        FOUR,
+        G,
+        H,
+        LEFT,
+        NINE,
+        ONE,
+        RIGHT,
+        S,
+        SEVEN,
+        SIX,
+        T,
+        THREE,
+        TWO,
+        U,
+        UP,
+        V,
+        W,
+        X,
+        Y,
+        Z;
     }
 }

@@ -31,6 +31,7 @@ public class Position {
         this.x = x;
         this.y = y;
         this.theta = theta;
+        computeTheta();
     }
 
     /**
