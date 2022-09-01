@@ -26,14 +26,14 @@ public class Arena {
     public void setObstacles(ArrayList<Obstacle> obstacles) {
         this.obstaclesMatrix = new Obstacle[NUM_ROWS][NUM_COLS];
         for (Obstacle obstacle : obstacles) {
-            this.obstaclesMatrix[obstacle.getColX()][obstacle.getColY()] = obstacle;
+            this.obstaclesMatrix[obstacle.getCellY()][obstacle.getCellX()] = obstacle;
         }
         this.obstacles = obstacles;
     }
 
     public void addObstacle(Obstacle obstacle) {
         obstacles.add(obstacle);
-        obstaclesMatrix[obstacle.getColX()][obstacle.getColY()] = obstacle;
+        obstaclesMatrix[obstacle.getCellY()][obstacle.getCellX()] = obstacle;
     }
 
     @Override

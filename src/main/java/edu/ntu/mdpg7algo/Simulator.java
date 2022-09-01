@@ -19,9 +19,9 @@ public class Simulator extends JFrame {
         super(title);
 
         arena = new Arena();
-        arena.addObstacle(new Obstacle(10, 10, Obstacle.Facing.DOWN));
-        arenaPanel = new ArenaPanel(30, 30, 30, 30, 20, 20, arena);
-        car = new Car(0, 0, Math.PI / 2);
+        arena.addObstacle(new Obstacle(8, 11, Obstacle.Facing.DOWN));
+        arena.setCar(new Car(15, 15, Math.PI / 2));
+        arenaPanel = new ArenaPanel(30, 30, 30, 30, arena);
 
         add(arenaPanel);
 
@@ -32,6 +32,6 @@ public class Simulator extends JFrame {
     }
 
     public static void main(String[] args) {
-        Simulator simulator = new Simulator("MDP Group7 Path Finding Visualization Tool");
+        new Simulator("MDP Group7 Path Finding Visualization Tool");
     }
 }

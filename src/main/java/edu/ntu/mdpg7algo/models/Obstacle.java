@@ -8,16 +8,16 @@ public class Obstacle {
     private final double ROBOT_OFFSET = 8;  // distance the robot needs to be away from the obstacle
 
     private boolean detected;
-    private int colX, colY;  // grid location of the obstacle
+    private int cellX, cellY;  // cell location of the obstacle
     private Facing facing;
 
-    public Obstacle(int colX, int colY, Facing facing) {
-        this(colX, colY, facing, false);
+    public Obstacle(int cellX, int cellY, Facing facing) {
+        this(cellX, cellY, facing, false);
     }
 
-    public Obstacle(int colX, int colY, Facing facing, boolean detected) {
-        this.colX = colX;
-        this.colY = colY;
+    public Obstacle(int cellX, int cellY, Facing facing, boolean detected) {
+        this.cellX = cellX;
+        this.cellY = cellY;
         this.facing = facing;
         this.detected = detected;
     }
@@ -26,14 +26,14 @@ public class Obstacle {
      * Computes the x position of the obstacle center in cm
      */
     public double getX() {
-        return (colX + 0.5) * Arena.CELL_WIDTH;
+        return (cellX + 0.5) * Arena.CELL_WIDTH;
     }
 
     /**
      * Computes the y position of the obstacle center in cm
      */
     public double getY() {
-        return (colY + 0.5) * Arena.CELL_HEIGHT;
+        return (cellY + 0.5) * Arena.CELL_HEIGHT;
     }
 
     public Position computeRobotPosition() {
@@ -47,7 +47,7 @@ public class Obstacle {
 
     @Override
     public String toString() {
-        return ("x: " + getColX() + " y: " + getColY() + " dir: " + this.facing);
+        return ("x: " + getCellX() + " y: " + getCellY() + " dir: " + this.facing);
     }
 
     public enum Facing {
