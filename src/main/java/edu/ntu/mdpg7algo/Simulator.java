@@ -20,14 +20,14 @@ public class Simulator extends JFrame {
 
         arena = new Arena();
         arena.addObstacle(new Obstacle(8, 11, Obstacle.Facing.DOWN, Obstacle.ObstacleImage.A));
-        arena.setCar(new Car(15, 15, Math.PI / 2));
-        arenaPanel = new ArenaPanel(30, 30, 30, 30, arena);
+        arena.setCar(new Car(30, 35, Math.PI * 2 / 3));
+        arenaPanel = new ArenaPanel(40, 40, 30, 30, arena);
 
         add(arenaPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
-        setSize(1280, 720);
+        setSize(720, 720);
         setVisible(true);
     }
 

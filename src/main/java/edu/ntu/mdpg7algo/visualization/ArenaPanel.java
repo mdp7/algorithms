@@ -1,6 +1,5 @@
 package edu.ntu.mdpg7algo.visualization;
 
-import edu.ntu.mdpg7algo.Simulator;
 import edu.ntu.mdpg7algo.models.Arena;
 import edu.ntu.mdpg7algo.models.Obstacle;
 import lombok.Data;
@@ -10,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -56,6 +57,9 @@ public class ArenaPanel extends JPanel {
         });
     }
 
+    /**
+     * JFrame x -> cellX
+     */
     private int getCellX(double absX) {
         if (absX < x0 || x0 + w < absX) {
             return -1;
@@ -63,6 +67,9 @@ public class ArenaPanel extends JPanel {
         return (int) ((absX - x0) / cellW);
     }
 
+    /**
+     * JFrame y -> cellY
+     */
     private int getCellY(double absY) {
         if (absY < y0 || y0 + h < absY) {
             return -1;
@@ -70,12 +77,45 @@ public class ArenaPanel extends JPanel {
         return 19 - (int) ((absY - y0) / cellH);
     }
 
+    /**
+     * cellY -> gridY
+     */
     private int convertGridY(int cellY) {
         return 19 - cellY;
     }
 
+    /**
+     * arena x -> JFrame x
+     */
+    private int convertJFrameX(double x) {
+        return (int) (x / (Arena.CELL_WIDTH * Arena.NUM_COLS) * w) + x0;
+    }
+
+    /**
+     * arena y -> JFrame y
+     */
+    private int convertJFrameY(double y) {
+        return (int) (h - (y / (Arena.CELL_HEIGHT * Arena.NUM_ROWS) * h) + y0);
+    }
+
+    private BufferedImage rotateImage(BufferedImage img, double rads, int w, int h, int newWidth, int newHeight) {
+        BufferedImage rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = rotated.createGraphics();
+        AffineTransform at = new AffineTransform();
+        at.translate((newWidth - w) / 2., (newHeight - h) / 2.);
+
+        int x = w / 2;
+        int y = h / 2;
+
+        at.rotate(rads, x, y);
+        g2d.setTransform(at);
+        g2d.drawImage(img, 0, 0, this);
+        g2d.dispose();
+
+        return rotated;
+    }
+
     public void paintComponent(Graphics g) {
-        System.out.println("called");
         super.paintComponent(g);
         // draw horizontal lines
         for (int i = 0; i <= NUM_ROW; i++) {
@@ -92,9 +132,29 @@ public class ArenaPanel extends JPanel {
         }
 
         try {
-            Image image = ImageIO.read(new File("assets/car.png"));
-            image = image.getScaledInstance(30, 30, Image.SCALE_DEFAULT);
-            double carX = arena.getCar().getPosition().getX(), carY = arena.getCar().getPosition().getY();
+            BufferedImage image = ImageIO.read(new File("assets/car.png"));
+            Image scaledImage = image.getScaledInstance((int) (cellW * 1.5), (int) (cellH * 1.5), Image.SCALE_DEFAULT);
+            image = new BufferedImage((int) (cellW * 1.5), (int) (cellH * 1.5), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = image.createGraphics();
+            g2d.drawImage(scaledImage, 0, 0, null);
+            g2d.dispose();
+
+            double rads = arena.getCar().getPosition().getTheta();
+            double sin = Math.abs(Math.sin(rads)), cos = Math.abs(Math.cos(rads));
+            int imageWidth = image.getWidth();
+            int imageHeight = image.getHeight();
+            int newWidth = (int) Math.floor(imageWidth * cos + imageHeight * sin);
+            int newHeight = (int) Math.floor(imageHeight * cos + imageWidth * sin);
+
+            image = rotateImage(image, -arena.getCar().getPosition().getTheta(), imageWidth, imageHeight, newWidth, newHeight);
+
+            double carX = convertJFrameX(arena.getCar().getPosition().getX());
+            double carY = convertJFrameY(arena.getCar().getPosition().getY());
+
+            carX -= newWidth / 2.;
+            carY -= newHeight / 2.;
+
+            System.out.println(carX + " " + carY);
             g.drawImage(image, (int) carX, (int) carY, this);
         }
         catch (IOException ioException) {
@@ -164,11 +224,14 @@ class ObstacleMenu extends JPopupMenu {
         }
         else {
             JMenuItem removeObstacleItem = new JMenuItem("Remove obstacle");
-            removeObstacleItem.addActionListener((e) -> arena.removeObstacle(cellX, cellY));
+            removeObstacleItem.addActionListener((e) -> {
+                arena.removeObstacle(cellX, cellY);
+                refreshPanel();
+            });
             add(removeObstacleItem);
 
             JMenu changeFacingMenu = new JMenu("Change image facing");
-            for (Obstacle.Facing facing: Obstacle.Facing.values()) {
+            for (Obstacle.Facing facing : Obstacle.Facing.values()) {
                 JMenuItem changeFacingItem = new JMenuItem(facing.toString());
                 changeFacingItem.addActionListener((e) -> {
                     obstacle.setFacing(facing);
@@ -179,7 +242,7 @@ class ObstacleMenu extends JPopupMenu {
             add(changeFacingMenu);
 
             JMenu changeImageMenu = new JMenu("Change image");
-            for (Obstacle.ObstacleImage obstacleImage: Obstacle.ObstacleImage.values()) {
+            for (Obstacle.ObstacleImage obstacleImage : Obstacle.ObstacleImage.values()) {
                 JMenuItem changeImageItem = new JMenuItem(obstacleImage.toString());
                 changeImageItem.addActionListener((e) -> {
                     obstacle.setObstacleImage(obstacleImage);
