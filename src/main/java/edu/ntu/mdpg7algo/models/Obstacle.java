@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Obstacle {
 
-    private final double ROBOT_OFFSET = 8;  // distance the robot needs to be away from the obstacle
+    private final double ROBOT_OFFSET = 20;  // distance the robot needs to be away from the obstacle
 
     private boolean detected;
     private int cellX, cellY;  // cell location of the obstacle
