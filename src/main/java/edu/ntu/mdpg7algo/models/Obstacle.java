@@ -24,6 +24,7 @@ public class Obstacle {
         this.detected = detected;
     }
 
+
     /**
      * Computes the x position of the obstacle center in cm
      */
@@ -37,6 +38,7 @@ public class Obstacle {
     public double getY() {
         return (cellY + 0.5) * Arena.CELL_HEIGHT;
     }
+
 
     public Position computeRobotPosition() {
         return switch (this.facing) {
