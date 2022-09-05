@@ -1,7 +1,7 @@
 package edu.ntu.mdpg7algo.pathfinding;
 
-import edu.ntu.mdpg7algo.models.Arena;
 import edu.ntu.mdpg7algo.models.Node2D;
+import edu.ntu.mdpg7algo.models.Node3D;
 import edu.ntu.mdpg7algo.models.Obstacle;
 import lombok.Data;
 
@@ -25,6 +25,25 @@ public class HybridAStarPlanner {
     private boolean[][] obstacles;
 
     public HybridAStarPlanner() {
+    }
+
+    public void hybridAStar(
+            Node3D start,
+            Node3D goal,
+            Node3D[] nodes3D,
+            Node2D[] nodes2D,
+            int width,
+            int height,
+            double[] dubinsLookup
+    ) {
+        int indexPredecessor, indexSuccessor;
+        double newG;
+        int dir = Node3D.DIR * 2;
+        int iterations = 0;
+
+        PriorityQueue<Node3D> open = new PriorityQueue<>((Comparator.comparingDouble(Node3D::getGH)));
+
+        updateH(start, goal, nodes2D, dubinsLookup, width, height);
     }
 
     public double aStar(Node2D start, Node2D goal, Node2D[] nodes2D, int width, int height) {
@@ -66,7 +85,7 @@ public class HybridAStarPlanner {
                 return predecessor.getG();
             }
 
-            for (int i = 0; i < Node2D.dir; i++) {
+            for (int i = 0; i < Node2D.DIR; i++) {
                 successor = predecessor.createSuccessor(i);
                 indexSuccessor = successor.setIndex(width);
                 if (successor.isOnGrid(width, height) &&
@@ -94,6 +113,20 @@ public class HybridAStarPlanner {
         }
         System.out.println("NOT FOUND");
         return 1000.;
+    }
+
+    public void updateH(
+            Node3D start,
+            Node3D goal,
+            Node2D[] nodes2D,
+            double[] dubinsLookup,
+            int width,
+            int height
+    ) {
+        double dubinsCost = 0;
+        double reedsSheppCost = 0;
+        double twoDCost = 0;
+        double twoDOffset = 0;
     }
 
     private boolean isTraversable(Node2D node) {

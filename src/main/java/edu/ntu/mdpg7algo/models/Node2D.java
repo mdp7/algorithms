@@ -5,9 +5,10 @@ import lombok.Data;
 @Data
 public class Node2D {
 
-    public static int dir = 8;
-    public static int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
-    public static int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+    public static final int DIR = 8;
+    public static final int[] DX = {-1, -1, -1, 0, 0, 1, 1, 1};
+    public static final int[] DY = {-1, 0, 1, -1, 1, -1, 0, 1};
+
     public int index;
     public int x, y;
     public double g, h;
@@ -79,6 +80,6 @@ public class Node2D {
      * deltaIndex is the index of dx and dy
      */
     public Node2D createSuccessor(int deltaIndex) {
-        return new Node2D(x + dx[deltaIndex], y + dy[deltaIndex], g, 0, this);
+        return new Node2D(x + DX[deltaIndex], y + DY[deltaIndex], g, 0, this);
     }
 }
