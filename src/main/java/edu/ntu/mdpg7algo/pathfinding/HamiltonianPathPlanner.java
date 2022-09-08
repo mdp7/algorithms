@@ -60,7 +60,26 @@ public class HamiltonianPathPlanner {
     numGoals = # of obstacles and Start
      */
 
-    public int[] planPath(double[][] dist, int numGoals){
+    public ArrayList<Obstacle> planPath(){
+        ArrayList<Obstacle> obstacles = arena.getObstacles();
+        int numGoals = obstacles.size();
+
+        /*
+        set start point
+        Create distance 2D array
+         */
+        double [][] dist = new double[obstacles.size()][obstacles.size()];
+
+        for(int i = 0; i < obstacles.size(); i++){
+            for (int j = 0; j < obstacles.size(); j++){
+                if(i == j) dist[i][j] = Double.MAX_VALUE;
+
+                else {
+                    dist[i][j] = computeDistance(obstacles.get(i), obstacles.get(j));
+                }
+            }
+        }
+
         boolean[] visited = new boolean[numGoals];
         int[] order = new int[numGoals];
 
@@ -72,6 +91,23 @@ public class HamiltonianPathPlanner {
 //      mark start as true
         visited[0] = true;
         travellingSalesMan(dist, visited, 0, numGoals, 1, 0, order);
-        return this.order;
+        return orderObstacles();
     }
+
+    public double computeDistance(Obstacle o1, Obstacle o2){
+        double delX = o1.getX() - o2.getX();
+        double delY = o1.getY() - o2.getY();
+        return Math.hypot(delX, delY);
+    }
+
+    private ArrayList<Obstacle> orderObstacles(){
+        ArrayList<Obstacle> orderedObstacle = new ArrayList<>();
+        for(int i = 0; i < order.length; i++){
+            orderedObstacle.add(arena.getObstacles().get(order[i]));
+        }
+
+        return orderedObstacle;
+
+    }
+
 }

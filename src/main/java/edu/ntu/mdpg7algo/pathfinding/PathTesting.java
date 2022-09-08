@@ -25,32 +25,32 @@ public class PathTesting {
         set start point
         Create distance 2D array
          */
-        double [][] dist = new double[obstacles.size()][obstacles.size()];
+//        double [][] dist = new double[obstacles.size()][obstacles.size()];
+//
+//        for(int i = 0; i < obstacles.size(); i++){
+//            for (int j = 0; j < obstacles.size(); j++){
+//                if(i == j) dist[i][j] = Double.MAX_VALUE;
+//
+//                else {
+//                    dist[i][j] = computeDistance(obstacles.get(i), obstacles.get(j));
+//                }
+//            }
+//        }
 
-        for(int i = 0; i < obstacles.size(); i++){
-            for (int j = 0; j < obstacles.size(); j++){
-                if(i == j) dist[i][j] = Double.MAX_VALUE;
-
-                else {
-                    dist[i][j] = computeDistance(obstacles.get(i), obstacles.get(j));
-                }
-            }
-        }
-
-        for(int i = 0; i < obstacles.size(); i++){
-            for (int j = 0; j < obstacles.size(); j++){
-                System.out.print(dist[i][j] + "\t");
-                }
-            System.out.println();
-            }
+//        for(int i = 0; i < obstacles.size(); i++){
+//            for (int j = 0; j < obstacles.size(); j++){
+//                System.out.print(dist[i][j] + "\t");
+//                }
+//            System.out.println();
+//            }
 
 
 
         HamiltonianPathPlanner h = new HamiltonianPathPlanner(arena);
-        int [] order = h.planPath(dist, obstacles.size());
+        ArrayList<Obstacle> order = h.planPath();
         System.out.println("Number of iterations: "+h.getIterations() + "\nMin cost: " + h.getMinCost());
-        for(int i = 0; i < order.length; i++){
-            System.out.println(order[i] + "\t");
+        for(Obstacle o : order){
+            System.out.println(o);
 
         }
 
