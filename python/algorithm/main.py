@@ -25,11 +25,12 @@ def run_simulator():
     # Fill in obstacle positions with respect to lower bottom left corner.
     # Obstacle positions are center of cell ie ends with 5!
     # (x-coordinate, y-coordinate, Direction)
-    # obstacles = [[25, 185, -90], [175, 185, -90], [135, 25, 90], [25, 95, 0], [175, 125, 180]]
-    # for index, o in enumerate(obstacles):
-    #     o.append(index)
+    obstacles = [[25, 185, -90], [175, 185, -90], [135, 25, 90], [25, 95, 0], [175, 125, 180]]
+    for index, o in enumerate(obstacles):
+        o.append(index)
 
-    # obs = parse_obstacle_data(obstacles)
+    obs = parse_obstacle_data(obstacles)
+    
     app = AlgoSimulator([])
     app.init()
     app.execute()
