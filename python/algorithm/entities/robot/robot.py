@@ -24,7 +24,7 @@ class Robot:
 
         self.brain = Brain(self, grid)
 
-        self.__image = pygame.transform.scale(pygame.image.load("entities/assets/left-arrow.png"),
+        self.__image = pygame.transform.scale(pygame.image.load("entities/assets/robot.png"),
                                               (settings.ROBOT_LENGTH / 2, settings.ROBOT_LENGTH / 2))
 
         self.path_hist = []  # Stores the history of the path taken by the robot.

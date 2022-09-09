@@ -54,4 +54,4 @@ class Node:
         # Draw self
         self.draw_self(screen)
         # Draw node border
-        # self.draw_boundary(screen)
+        self.draw_boundary(screen)
