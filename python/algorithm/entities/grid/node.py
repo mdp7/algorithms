@@ -12,6 +12,7 @@ class Node:
         """
         self.pos = Position(x, y, direction)
         self.occupied = occupied
+        self.start = True if 0 <= x < 5 * settings.GRID_CELL_LENGTH  and  0 <= y <= settings.GRID_CELL_LENGTH  * 5 else False
 
     def __str__(self):
         return f"Node({self.pos})"
@@ -31,10 +32,14 @@ class Node:
         return Node(self.pos.x, self.pos.y, self.occupied, self.pos.direction)
 
     def draw_self(self, screen):
-        if self.occupied:  # If current node is not permissible to the robot
+        # if self.occupied:  # If current node is not permissible to the robot
+        #     rect = pygame.Rect(0, 0, settings.GRID_CELL_LENGTH, settings.GRID_CELL_LENGTH)
+        #     rect.center = self.pos.xy_pygame()
+        #     pygame.draw.rect(screen, colors.ORANGE, rect)
+        if self.start:
             rect = pygame.Rect(0, 0, settings.GRID_CELL_LENGTH, settings.GRID_CELL_LENGTH)
             rect.center = self.pos.xy_pygame()
-            pygame.draw.rect(screen, colors.ORANGE, rect)
+            pygame.draw.rect(screen, colors.LIGHT_BLUE, rect)
 
     def draw_boundary(self, screen):
         x_pygame, y_pygame = self.pos.xy_pygame()

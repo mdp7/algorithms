@@ -88,7 +88,7 @@ class Obstacle:
         # Get the coordinates of the grid's bottom left-hand corner.
         rect = pygame.Rect(0, 0, settings.OBSTACLE_LENGTH, settings.OBSTACLE_LENGTH)
         rect.center = self.pos.xy_pygame()
-        pygame.draw.rect(screen, colors.BLACK, rect)
+        pygame.draw.rect(screen, colors.GREEN, rect)
 
         # Draw the direction of the picture
         rect.width = settings.OBSTACLE_LENGTH / 2
