@@ -72,7 +72,8 @@ public class Node3D {
     }
 
     public boolean isInRange(Node3D goal) {
-        int random = new Random().nextInt(0, 11);
+//        int random = new Random().nextInt(0, 11);
+        int random = 5;
         double dx = Math.abs(x - goal.x) / random;
         double dy = Math.abs(y - goal.y) / random;
         return (dx * dx) + (dy * dy) < DUBINS_SHOT_DISTANCE;
