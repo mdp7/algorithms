@@ -2,12 +2,12 @@ import sys
 import time
 from typing import List
 
-import settings
-from app import AlgoSimulator, AlgoMinimal
-from entities.assets.direction import Direction
-from entities.connection.rpi_client import RPiClient
-from entities.connection.rpi_server import RPiServer
-from entities.grid.obstacle import Obstacle
+from algorithm import const
+from algorithm.app import AlgoSimulator, AlgoMinimal
+from algorithm.entities.assets.direction import Direction
+from algorithm.entities.connection.rpi_client import RPiClient
+from algorithm.entities.connection.rpi_server import RPiServer
+from algorithm.entities.grid.obstacle import Obstacle
 
 
 def parse_obstacle_data(data) -> List[Obstacle]:
@@ -30,7 +30,7 @@ def run_simulator():
         o.append(index)
 
     obs = parse_obstacle_data(obstacles)
-    
+
     app = AlgoSimulator([])
     app.init()
     app.execute()
@@ -38,8 +38,8 @@ def run_simulator():
 
 def run_minimal(also_run_simulator):
     # Create a client to connect to the RPi.
-    print(f"Attempting to connect to {settings.RPI_HOST}:{settings.RPI_PORT}")
-    client = RPiClient(settings.RPI_HOST, settings.RPI_PORT)
+    print(f"Attempting to connect to {const.RPI_HOST}:{const.RPI_PORT}")
+    client = RPiClient(const.RPI_HOST, const.RPI_PORT)
     # Wait to connect to RPi.
     while True:
         try:
@@ -54,7 +54,7 @@ def run_minimal(also_run_simulator):
 
     print("Waiting to receive obstacle data from RPi...")
     # Create a server to receive information from the RPi.
-    server = RPiServer(settings.PC_HOST, settings.PC_PORT)
+    server = RPiServer(const.PC_HOST, const.PC_PORT)
     # Wait for the RPi to connect to the PC.
     try:
         server.start()

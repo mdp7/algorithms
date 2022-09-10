@@ -1,5 +1,5 @@
-import settings
-from entities.assets.direction import Direction
+from algorithm import const
+from algorithm.entities.assets.direction import Direction
 
 
 class Position:
@@ -16,7 +16,7 @@ class Position:
         self.direction = direction
 
     def __str__(self):
-        return f"Position({(self.x // settings.SCALING_FACTOR)}, {self.y // settings.SCALING_FACTOR}, " \
+        return f"Position({(self.x // const.SCALING_FACTOR)}, {self.y // const.SCALING_FACTOR}, " \
                f"angle={self.direction})"
 
     __repr__ = __str__
@@ -34,7 +34,7 @@ class Position:
         """
         Return the x, y coordinates in terms of Pygame coordinates. Useful for drawing on screen.
         """
-        return self.x, settings.GRID_LENGTH - self.y
+        return self.x, const.GRID_LENGTH - self.y
 
     def copy(self):
         """

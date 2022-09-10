@@ -1,9 +1,9 @@
 import pygame
 
-import settings
-from entities.assets import colors
-from entities.assets.direction import Direction
-from entities.grid.position import Position, RobotPosition
+from algorithm import const
+from algorithm.entities.assets import colors
+from algorithm.entities.assets.direction import Direction
+from algorithm.entities.grid.position import Position, RobotPosition
 
 
 class Obstacle:
@@ -21,7 +21,7 @@ class Obstacle:
             raise AssertionError("Obstacle center coordinates must be multiples of 10 with offset 5!")
 
         # Translate given coordinates to be in PyGame coordinates.
-        self.pos = Position(x * settings.SCALING_FACTOR, y * settings.SCALING_FACTOR, direction)
+        self.pos = Position(x * const.SCALING_FACTOR, y * const.SCALING_FACTOR, direction)
 
         # Arrow to draw at the target coordinate.
         self.target_image = pygame.transform.scale(pygame.image.load("entities/assets/target-arrow-2.png"),
@@ -38,8 +38,8 @@ class Obstacle:
         """
         Checks whether a given x-y coordinate is within the safety boundary of this obstacle.
         """
-        if self.pos.x - settings.OBSTACLE_SAFETY_WIDTH < x < self.pos.x + settings.OBSTACLE_SAFETY_WIDTH and \
-                self.pos.y - settings.OBSTACLE_SAFETY_WIDTH < y < self.pos.y + settings.OBSTACLE_SAFETY_WIDTH:
+        if self.pos.x - const.OBSTACLE_SAFETY_WIDTH < x < self.pos.x + const.OBSTACLE_SAFETY_WIDTH and \
+                self.pos.y - const.OBSTACLE_SAFETY_WIDTH < y < self.pos.y + const.OBSTACLE_SAFETY_WIDTH:
             return True
         return False
 
@@ -49,10 +49,10 @@ class Obstacle:
 
         Useful for checking if a point is within the boundary of this obstacle.
         """
-        upper = self.pos.y + settings.OBSTACLE_SAFETY_WIDTH
-        lower = self.pos.y - settings.OBSTACLE_SAFETY_WIDTH
-        left = self.pos.x - settings.OBSTACLE_SAFETY_WIDTH
-        right = self.pos.x + settings.OBSTACLE_SAFETY_WIDTH
+        upper = self.pos.y + const.OBSTACLE_SAFETY_WIDTH
+        lower = self.pos.y - const.OBSTACLE_SAFETY_WIDTH
+        left = self.pos.x - const.OBSTACLE_SAFETY_WIDTH
+        right = self.pos.x + const.OBSTACLE_SAFETY_WIDTH
 
         return [
             # Note that in this case, the direction does not matter.
@@ -74,35 +74,39 @@ class Obstacle:
         The object will also store the angle that the robot should face.
         """
         if self.pos.direction == Direction.TOP:
-            return RobotPosition(self.pos.x, self.pos.y + settings.OBSTACLE_SAFETY_WIDTH + settings.OBSTACLE_LENGTH, Direction.BOTTOM)
+            return RobotPosition(self.pos.x, self.pos.y + const.OBSTACLE_SAFETY_WIDTH + const.OBSTACLE_LENGTH,
+                                 Direction.BOTTOM)
         elif self.pos.direction == Direction.BOTTOM:
-            return RobotPosition(self.pos.x, self.pos.y - settings.OBSTACLE_SAFETY_WIDTH - settings.OBSTACLE_LENGTH, Direction.TOP)
+            return RobotPosition(self.pos.x, self.pos.y - const.OBSTACLE_SAFETY_WIDTH - const.OBSTACLE_LENGTH,
+                                 Direction.TOP)
         elif self.pos.direction == Direction.LEFT:
-            return RobotPosition(self.pos.x - settings.OBSTACLE_SAFETY_WIDTH - settings.OBSTACLE_LENGTH, self.pos.y, Direction.RIGHT)
+            return RobotPosition(self.pos.x - const.OBSTACLE_SAFETY_WIDTH - const.OBSTACLE_LENGTH, self.pos.y,
+                                 Direction.RIGHT)
         else:
-            return RobotPosition(self.pos.x + settings.OBSTACLE_SAFETY_WIDTH + settings.OBSTACLE_LENGTH, self.pos.y, Direction.LEFT)
+            return RobotPosition(self.pos.x + const.OBSTACLE_SAFETY_WIDTH + const.OBSTACLE_LENGTH, self.pos.y,
+                                 Direction.LEFT)
 
     def draw_self(self, screen):
         # Draw the obstacle onto the grid.
         # We need to translate the obstacle's center into that with respect to PyGame
         # Get the coordinates of the grid's bottom left-hand corner.
-        rect = pygame.Rect(0, 0, settings.OBSTACLE_LENGTH, settings.OBSTACLE_LENGTH)
+        rect = pygame.Rect(0, 0, const.OBSTACLE_LENGTH, const.OBSTACLE_LENGTH)
         rect.center = self.pos.xy_pygame()
         pygame.draw.rect(screen, colors.GREEN, rect)
 
         # Draw the direction of the picture
-        rect.width = settings.OBSTACLE_LENGTH / 2
-        rect.height = settings.OBSTACLE_LENGTH / 2
+        rect.width = const.OBSTACLE_LENGTH / 2
+        rect.height = const.OBSTACLE_LENGTH / 2
         rect.center = self.pos.xy_pygame()
 
         if self.pos.direction == Direction.TOP:
-            rect.centery -= settings.OBSTACLE_LENGTH / 4
+            rect.centery -= const.OBSTACLE_LENGTH / 4
         elif self.pos.direction == Direction.BOTTOM:
-            rect.centery += settings.OBSTACLE_LENGTH / 4
+            rect.centery += const.OBSTACLE_LENGTH / 4
         elif self.pos.direction == Direction.LEFT:
-            rect.centerx -= settings.OBSTACLE_LENGTH / 4
+            rect.centerx -= const.OBSTACLE_LENGTH / 4
         else:
-            rect.centerx += settings.OBSTACLE_LENGTH / 4
+            rect.centerx += const.OBSTACLE_LENGTH / 4
 
         # Draw the picture place
         pygame.draw.rect(screen, colors.RED, rect)

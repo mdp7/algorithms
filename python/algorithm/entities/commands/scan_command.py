@@ -1,4 +1,4 @@
-from entities.commands.command import Command
+from algorithm.entities.commands.command import Command
 
 
 class ScanCommand(Command):

@@ -1,11 +1,12 @@
-import socket
 import pickle
+import socket
 
 
 class RPiServer:
     """
     Used as the server in the RPi.
     """
+
     def __init__(self, host, port):
         self.host = host
         self.port = port

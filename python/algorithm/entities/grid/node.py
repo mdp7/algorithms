@@ -1,8 +1,8 @@
 import pygame
 
-import settings
-from entities.assets import colors
-from entities.grid.position import Position
+from algorithm import const
+from algorithm.entities.assets import colors
+from algorithm.entities.grid.position import Position
 
 
 class Node:
@@ -12,7 +12,7 @@ class Node:
         """
         self.pos = Position(x, y, direction)
         self.occupied = occupied
-        self.start = True if 0 <= x < 5 * settings.GRID_CELL_LENGTH  and  0 <= y <= settings.GRID_CELL_LENGTH  * 5 else False
+        self.start = True if 0 <= x < 5 * const.GRID_CELL_LENGTH and 0 <= y <= const.GRID_CELL_LENGTH * 5 else False
 
     def __str__(self):
         return f"Node({self.pos})"
@@ -33,21 +33,21 @@ class Node:
 
     def draw_self(self, screen):
         # if self.occupied:  # If current node is not permissible to the robot
-        #     rect = pygame.Rect(0, 0, settings.GRID_CELL_LENGTH, settings.GRID_CELL_LENGTH)
+        #     rect = pygame.Rect(0, 0, const.GRID_CELL_LENGTH, const.GRID_CELL_LENGTH)
         #     rect.center = self.pos.xy_pygame()
         #     pygame.draw.rect(screen, colors.ORANGE, rect)
         if self.start:
-            rect = pygame.Rect(0, 0, settings.GRID_CELL_LENGTH, settings.GRID_CELL_LENGTH)
+            rect = pygame.Rect(0, 0, const.GRID_CELL_LENGTH, const.GRID_CELL_LENGTH)
             rect.center = self.pos.xy_pygame()
             pygame.draw.rect(screen, colors.LIGHT_BLUE, rect)
 
     def draw_boundary(self, screen):
         x_pygame, y_pygame = self.pos.xy_pygame()
 
-        left = x_pygame - settings.GRID_CELL_LENGTH // 2
-        right = x_pygame + settings.GRID_CELL_LENGTH // 2
-        top = y_pygame - settings.GRID_CELL_LENGTH // 2
-        bottom = y_pygame + settings.GRID_CELL_LENGTH // 2
+        left = x_pygame - const.GRID_CELL_LENGTH // 2
+        right = x_pygame + const.GRID_CELL_LENGTH // 2
+        top = y_pygame - const.GRID_CELL_LENGTH // 2
+        bottom = y_pygame + const.GRID_CELL_LENGTH // 2
 
         # Draw
         pygame.draw.line(screen, colors.BLACK, (left, top), (left, bottom))  # Left border

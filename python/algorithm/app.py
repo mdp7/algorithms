@@ -1,14 +1,15 @@
-from typing import List
 from abc import ABC, abstractmethod
+from typing import List
 
 import pygame
 
-import settings
-from entities.assets import colors
-from entities.grid.grid import Grid
-from entities.grid.obstacle import Obstacle
-from entities.robot.robot import Robot
-from entities.assets.direction import Direction
+from algorithm import const
+from algorithm.entities.assets import colors
+from algorithm.entities.assets.direction import Direction
+from algorithm.entities.grid.grid import Grid
+from algorithm.entities.grid.obstacle import Obstacle
+from algorithm.entities.robot.robot import Robot
+
 
 class AlgoApp(ABC):
     def __init__(self, obstacles: List[Obstacle]):
@@ -31,11 +32,12 @@ class AlgoSimulator(AlgoApp):
     """
     Run the algorithm using a GUI simulator.
     """
+
     def __init__(self, obstacles: List[Obstacle]):
         super().__init__(obstacles)
 
         self.running = False
-        self.size = self.width, self.height = settings.WINDOW_SIZE
+        self.size = self.width, self.height = const.WINDOW_SIZE
         self.screen = self.clock = None
 
     def init(self):
@@ -53,7 +55,7 @@ class AlgoSimulator(AlgoApp):
         font = pygame.font.SysFont("arial", 35)
         text = font.render("Calculating path...", True, colors.WHITE)
         text_rect = text.get_rect()
-        text_rect.center = settings.WINDOW_SIZE[0] / 2, settings.WINDOW_SIZE[1] / 2
+        text_rect.center = const.WINDOW_SIZE[0] / 2, const.WINDOW_SIZE[1] / 2
         self.screen.blit(text, text_rect)
         pygame.display.flip()
 
@@ -72,8 +74,8 @@ class AlgoSimulator(AlgoApp):
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                x = pos[0] // settings.GRID_CELL_LENGTH * 10 + 5
-                y = abs(pos[1] // settings.GRID_CELL_LENGTH - 19) * 10 + 5
+                x = pos[0] // const.GRID_CELL_LENGTH * 10 + 5
+                y = abs(pos[1] // const.GRID_CELL_LENGTH - 19) * 10 + 5
                 print("Click ", pos, "Grid coordinates: ", x, y)
                 obstacle = [x, y, self.direction.value, self.index]
                 self.index += 1
@@ -100,14 +102,13 @@ class AlgoSimulator(AlgoApp):
                     font = pygame.font.SysFont("arial", 35)
                     text = font.render("Calculating path...", True, colors.WHITE)
                     text_rect = text.get_rect()
-                    text_rect.center = settings.WINDOW_SIZE[0] / 2, settings.WINDOW_SIZE[1] / 2
+                    text_rect.center = const.WINDOW_SIZE[0] / 2, const.WINDOW_SIZE[1] / 2
                     self.screen.blit(text, text_rect)
                     pygame.display.flip()
                     self.robot = Robot(self.grid)
                     # Calculate the path.
                     self.robot.brain.plan_path()
                     pygame.display.set_caption("Simulating path!")  # Update the caption once done
-
 
     def parse_obstacle_data(self) -> List[Obstacle]:
         obs = []
@@ -118,7 +119,6 @@ class AlgoSimulator(AlgoApp):
                                 obstacle_params[3]))
         # [[x, y, orient, index], [x, y, orient, index]]
         return obs
-
 
     def do_updates(self):
         self.robot.update()
@@ -148,13 +148,14 @@ class AlgoSimulator(AlgoApp):
             # Render the new frame.
             self.render()
 
-            self.clock.tick(settings.FRAMES)
-    
+            self.clock.tick(const.FRAMES)
+
 
 class AlgoMinimal(AlgoApp):
     """
     Minimal app to just calculate a path and then send the commands over.
     """
+
     def __init__(self, obstacles):
         # We run it as a server.
         super().__init__(obstacles)

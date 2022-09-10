@@ -1,7 +1,7 @@
-import settings
-from entities.assets.direction import Direction
-from entities.commands.command import Command
-from entities.grid.position import Position
+from algorithm import const
+from algorithm.entities.assets.direction import Direction
+from algorithm.entities.commands.command import Command
+from algorithm.entities.grid.position import Position
 
 
 class StraightCommand(Command):
@@ -10,13 +10,13 @@ class StraightCommand(Command):
         Specified distance is scaled. Do not divide the provided distance by the scaling factor!
         """
         # Calculate the time needed to travel the required distance.
-        time = abs(dist / settings.ROBOT_SPEED_PER_SECOND)
+        time = abs(dist / const.ROBOT_SPEED_PER_SECOND)
         super().__init__(time)
 
         self.dist = dist
 
     def __str__(self):
-        return f"StraightCommand(dist={self.dist / settings.SCALING_FACTOR}, {self.total_ticks} ticks)"
+        return f"StraightCommand(dist={self.dist / const.SCALING_FACTOR}, {self.total_ticks} ticks)"
 
     __repr__ = __str__
 
@@ -49,7 +49,7 @@ class StraightCommand(Command):
 
         # Note that the distance is now scaled.
         # Therefore, we need to de-scale it.
-        descaled_distance = int(self.dist // settings.SCALING_FACTOR)
+        descaled_distance = int(self.dist // const.SCALING_FACTOR)
         # Check if forward or backward.
         if descaled_distance < 0:
             # It is a backward command.

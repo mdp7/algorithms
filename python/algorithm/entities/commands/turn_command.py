@@ -1,9 +1,9 @@
 import math
 
-import settings
-from entities.assets.direction import Direction
-from entities.commands.command import Command
-from entities.grid.position import Position, RobotPosition
+from algorithm import const
+from algorithm.entities.assets.direction import Direction
+from algorithm.entities.commands.command import Command
+from algorithm.entities.grid.position import Position, RobotPosition
 
 
 class TurnCommand(Command):
@@ -13,8 +13,8 @@ class TurnCommand(Command):
 
         Note that negative angles will always result in the robot being rotated clockwise.
         """
-        time = abs((math.radians(angle) * settings.ROBOT_LENGTH) /
-                   (settings.ROBOT_SPEED_PER_SECOND * settings.ROBOT_S_FACTOR))
+        time = abs((math.radians(angle) * const.ROBOT_LENGTH) /
+                   (const.ROBOT_SPEED_PER_SECOND * const.ROBOT_S_FACTOR))
         super().__init__(time)
 
         self.angle = angle
@@ -49,9 +49,9 @@ class TurnCommand(Command):
         assert isinstance(curr_pos, RobotPosition), print("Cannot apply turn command on non-robot positions!")
 
         # Get change in (x, y) coordinate.
-        x_change = settings.ROBOT_TURN_RADIUS * (math.sin(math.radians(curr_pos.angle + self.angle)) -
+        x_change = const.ROBOT_TURN_RADIUS * (math.sin(math.radians(curr_pos.angle + self.angle)) -
                                                  math.sin(math.radians(curr_pos.angle)))
-        y_change = settings.ROBOT_TURN_RADIUS * (math.cos(math.radians(curr_pos.angle + self.angle)) -
+        y_change = const.ROBOT_TURN_RADIUS * (math.cos(math.radians(curr_pos.angle + self.angle)) -
                                                  math.cos(math.radians(curr_pos.angle)))
 
         if self.angle < 0 and not self.rev:  # Wheels to right moving forward.

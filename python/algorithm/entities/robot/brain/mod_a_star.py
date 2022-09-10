@@ -2,13 +2,13 @@ import math
 from queue import PriorityQueue
 from typing import List, Tuple
 
-import settings
-from entities.commands.command import Command
-from entities.commands.straight_command import StraightCommand
-from entities.commands.turn_command import TurnCommand
-from entities.grid.grid import Grid
-from entities.grid.node import Node
-from entities.grid.position import RobotPosition
+from algorithm import const
+from algorithm.entities.commands.command import Command
+from algorithm.entities.commands.straight_command import StraightCommand
+from algorithm.entities.commands.turn_command import TurnCommand
+from algorithm.entities.grid.grid import Grid
+from algorithm.entities.grid.node import Node
+from algorithm.entities.grid.position import RobotPosition
 
 
 class ModifiedAStar:
@@ -34,7 +34,7 @@ class ModifiedAStar:
         neighbours = []
 
         # Check travel straights.
-        straight_dist = 10 * settings.SCALING_FACTOR
+        straight_dist = 10 * const.SCALING_FACTOR
         straight_commands = [
             StraightCommand(straight_dist),
             StraightCommand(-straight_dist)
@@ -46,7 +46,7 @@ class ModifiedAStar:
                 neighbours.append((after, p, straight_dist, c))
 
         # Check turns
-        turn_penalty = settings.PATH_TURN_COST
+        turn_penalty = const.PATH_TURN_COST
         turn_commands = [
             TurnCommand(90, False),  # Forward right turn
             TurnCommand(-90, False),  # Forward left turn
@@ -70,8 +70,8 @@ class ModifiedAStar:
         p = p.copy()
         if isinstance(command, TurnCommand):
             p_c = p.copy()
-            for tick in range(command.ticks // settings.PATH_TURN_CHECK_GRANULARITY):
-                tick_command = TurnCommand(command.angle / (command.ticks // settings.PATH_TURN_CHECK_GRANULARITY),
+            for tick in range(command.ticks // const.PATH_TURN_CHECK_GRANULARITY):
+                tick_command = TurnCommand(command.angle / (command.ticks // const.PATH_TURN_CHECK_GRANULARITY),
                                            command.rev)
                 tick_command.apply_on_pos(p_c)
                 if not (self.grid.check_valid_position(p_c) and self.grid.get_coordinate_node(*p_c.xy())):

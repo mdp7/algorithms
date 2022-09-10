@@ -3,11 +3,12 @@ import math
 from collections import deque
 from typing import Tuple
 
-import settings
-from entities.commands.scan_command import ScanCommand
-from entities.commands.straight_command import StraightCommand
-from entities.grid.obstacle import Obstacle
-from entities.robot.brain.mod_a_star import ModifiedAStar
+from algorithm import const
+from algorithm.entities.commands.scan_command import ScanCommand
+from algorithm.entities.commands.straight_command import StraightCommand
+from algorithm.entities.grid.obstacle import Obstacle
+from algorithm.entities.robot.brain.mod_a_star import ModifiedAStar
+
 
 class Brain:
     def __init__(self, robot, grid):
@@ -87,7 +88,7 @@ class Brain:
             else:
                 print("\tPath found.")
                 curr = res
-                self.commands.append(ScanCommand(settings.ROBOT_SCAN_TIME, obstacle.index))
+                self.commands.append(ScanCommand(const.ROBOT_SCAN_TIME, obstacle.index))
 
         self.compress_paths()
         print("-" * 40)

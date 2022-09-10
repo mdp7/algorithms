@@ -6,6 +6,7 @@ class RPiClient:
     """
     Used for connecting to...
     """
+
     def __init__(self, host, port):
         self.host = host
         self.port = port

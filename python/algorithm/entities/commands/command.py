@@ -1,13 +1,13 @@
 import math
 from abc import ABC, abstractmethod
 
-import settings
+from algorithm import const
 
 
 class Command(ABC):
     def __init__(self, time):
         self.time = time  # Time in seconds in which this command is carried out.
-        self.ticks = math.ceil(time * settings.FRAMES)  # Number of frame ticks that this command will take.
+        self.ticks = math.ceil(time * const.FRAMES)  # Number of frame ticks that this command will take.
         self.total_ticks = self.ticks  # Keep track of original total ticks.
 
     def tick(self):

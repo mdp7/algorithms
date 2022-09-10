@@ -1,14 +1,15 @@
-import pygame
 import datetime
 
-import settings
-from entities.assets import colors
-from entities.assets.direction import Direction
-from entities.commands.command import Command
-from entities.commands.straight_command import StraightCommand
-from entities.commands.turn_command import TurnCommand
-from entities.grid.position import RobotPosition
-from entities.robot.brain.brain import Brain
+import pygame
+
+from algorithm import const
+from algorithm.entities.assets import colors
+from algorithm.entities.assets.direction import Direction
+from algorithm.entities.commands.command import Command
+from algorithm.entities.commands.straight_command import StraightCommand
+from algorithm.entities.commands.turn_command import TurnCommand
+from algorithm.entities.grid.position import RobotPosition
+from algorithm.entities.robot.brain.brain import Brain
 
 
 class Robot:
@@ -16,8 +17,8 @@ class Robot:
         # Note that we assume the robot starts always facing the top.
         # This value will never change, but it will not affect us as the robot uses a more fine-tuned internal
         # angle tracker.
-        self.pos = RobotPosition(settings.ROBOT_SAFETY_DISTANCE,
-                                 settings.ROBOT_SAFETY_DISTANCE,
+        self.pos = RobotPosition(const.ROBOT_SAFETY_DISTANCE,
+                                 const.ROBOT_SAFETY_DISTANCE,
                                  Direction.TOP,
                                  90)
         self._start_copy = self.pos.copy()
@@ -25,7 +26,7 @@ class Robot:
         self.brain = Brain(self, grid)
 
         self.__image = pygame.transform.scale(pygame.image.load("entities/assets/robot.png"),
-                                              (settings.ROBOT_LENGTH / 2, settings.ROBOT_LENGTH / 2))
+                                              (const.ROBOT_LENGTH // 2, const.ROBOT_LENGTH // 2))
 
         self.path_hist = []  # Stores the history of the path taken by the robot.
 
