@@ -12,22 +12,22 @@ class StraightCommand(Command):
         # Calculate the time needed to travel the required distance.
         time = abs(dist / const.ROBOT_SPEED_PER_SECOND)
         super().__init__(time)
-
+        
         self.dist = dist
-
+    
     def __str__(self):
         return f"StraightCommand(dist={self.dist / const.SCALING_FACTOR}, {self.total_ticks} ticks)"
-
+    
     __repr__ = __str__
-
+    
     def process_one_tick(self, robot):
         if self.total_ticks == 0:
             return
-
+        
         self.tick()
         distance = self.dist / self.total_ticks
         robot.straight(distance)
-
+    
     def apply_on_pos(self, curr_pos: Position):
         """
         Apply this command onto a current Position object.
@@ -40,13 +40,13 @@ class StraightCommand(Command):
             curr_pos.y -= self.dist
         else:
             curr_pos.x -= self.dist
-
+        
         return self
-
+    
     def convert_to_message(self):
         # MESSAGE: fXXXX for forward, bXXXX for backward.
         # XXXX is the distance in decimal in centimeters.
-
+        
         # Note that the distance is now scaled.
         # Therefore, we need to de-scale it.
         descaled_distance = int(self.dist // const.SCALING_FACTOR)

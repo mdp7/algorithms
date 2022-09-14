@@ -16,23 +16,23 @@ class TurnCommand(Command):
         time = abs((math.radians(angle) * const.ROBOT_LENGTH) /
                    (const.ROBOT_SPEED_PER_SECOND * const.ROBOT_S_FACTOR))
         super().__init__(time)
-
+        
         self.angle = angle
         self.rev = rev
-
+    
     def __str__(self):
         return f"TurnCommand({self.angle:.2f}degrees, {self.total_ticks} ticks, rev={self.rev})"
-
+    
     __repr__ = __str__
-
+    
     def process_one_tick(self, robot):
         if self.total_ticks == 0:
             return
-
+        
         self.tick()
         angle = self.angle / self.total_ticks
         robot.turn(angle, self.rev)
-
+    
     def apply_on_pos(self, curr_pos: Position):
         """
         x_new = x + R(sin(∆θ + θ) − sin θ)
@@ -47,13 +47,13 @@ class TurnCommand(Command):
         Note that ∆θ is in radians.
         """
         assert isinstance(curr_pos, RobotPosition), print("Cannot apply turn command on non-robot positions!")
-
+        
         # Get change in (x, y) coordinate.
         x_change = const.ROBOT_TURN_RADIUS * (math.sin(math.radians(curr_pos.angle + self.angle)) -
-                                                 math.sin(math.radians(curr_pos.angle)))
+                                              math.sin(math.radians(curr_pos.angle)))
         y_change = const.ROBOT_TURN_RADIUS * (math.cos(math.radians(curr_pos.angle + self.angle)) -
-                                                 math.cos(math.radians(curr_pos.angle)))
-
+                                              math.cos(math.radians(curr_pos.angle)))
+        
         if self.angle < 0 and not self.rev:  # Wheels to right moving forward.
             curr_pos.x -= x_change
             curr_pos.y += y_change
@@ -65,12 +65,12 @@ class TurnCommand(Command):
             curr_pos.x -= x_change
             curr_pos.y += y_change
         curr_pos.angle += self.angle
-
+        
         if curr_pos.angle < -180:
             curr_pos.angle += 2 * 180
         elif curr_pos.angle >= 180:
             curr_pos.angle -= 2 * 180
-
+        
         # Update the Position's direction.
         if 45 <= curr_pos.angle <= 3 * 45:
             curr_pos.direction = Direction.TOP
@@ -81,7 +81,7 @@ class TurnCommand(Command):
         else:
             curr_pos.direction = Direction.LEFT
         return self
-
+    
     def convert_to_message(self):
         if self.angle > 0 and not self.rev:
             # This is going forward left.

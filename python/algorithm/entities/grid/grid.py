@@ -15,7 +15,7 @@ class Grid:
     def __init__(self, obstacles: List[Obstacle]):
         self.obstacles = obstacles
         self.nodes = self.generate_nodes()
-
+    
     def generate_nodes(self):
         """
         Generate the nodes for this grid.
@@ -30,7 +30,7 @@ class Grid:
                 row.append(new_node)
             nodes.appendleft(row)
         return nodes
-
+    
     def get_coordinate_node(self, x, y):
         """
         Get the corresponding Node object that contains specified x, y coordinates.
@@ -43,7 +43,7 @@ class Grid:
             return self.nodes[row_num][col_num]
         except IndexError:
             return None
-
+    
     def copy(self):
         """
         Return a copy of the grid.
@@ -57,7 +57,7 @@ class Grid:
         new_grid = Grid(self.obstacles)
         new_grid.nodes = nodes
         return new_grid
-
+    
     def check_valid_position(self, pos: Position):
         """
         Check if a current position can be here.
@@ -65,7 +65,7 @@ class Grid:
         # Check if position is inside any obstacle.
         if any(obstacle.check_within_boundary(*pos.xy()) for obstacle in self.obstacles):
             return False
-
+        
         # Check if position too close to the border.
         # NOTE: We allow the robot to overextend the border a little!
         # We do this by setting the limit to be GRID_CELL_LENGTH rather than ROBOT_SAFETY_DISTANCE
@@ -75,7 +75,7 @@ class Grid:
                  pos.x > const.GRID_LENGTH - const.GRID_CELL_LENGTH):
             return False
         return True
-
+    
     @classmethod
     def draw_arena_borders(cls, screen):
         """
@@ -89,16 +89,16 @@ class Grid:
         pygame.draw.line(screen, colors.RED, (0, 0), (0, const.GRID_LENGTH))
         # Draw right border
         pygame.draw.line(screen, colors.RED, (const.GRID_LENGTH, 0), (const.GRID_LENGTH, const.GRID_LENGTH))
-
+    
     def draw_obstacles(self, screen):
         for ob in self.obstacles:
             ob.draw(screen)
-
+    
     def draw_nodes(self, screen):
         for row in self.nodes:
             for col in row:
                 col.draw(screen)
-
+    
     def draw(self, screen):
         # Draw nodes
         self.draw_nodes(screen)

@@ -28,9 +28,9 @@ def run_simulator():
     obstacles = [[25, 185, -90], [175, 185, -90], [135, 25, 90], [25, 95, 0], [175, 125, 180]]
     for index, o in enumerate(obstacles):
         o.append(index)
-
+    
     obs = parse_obstacle_data(obstacles)
-
+    
     app = AlgoSimulator([])
     app.init()
     app.execute()
@@ -51,7 +51,7 @@ def run_minimal(also_run_simulator):
             client.close()
             sys.exit(1)
     print("Connected to RPi!\n")
-
+    
     print("Waiting to receive obstacle data from RPi...")
     # Create a server to receive information from the RPi.
     server = RPiServer(const.PC_HOST, const.PC_PORT)
@@ -63,14 +63,14 @@ def run_minimal(also_run_simulator):
         server.close()
         client.close()
         sys.exit(1)
-
+    
     # At this point, both the RPi and the PC are connected to each other.
     # Create a synchronous call to wait for RPi data.
     obstacle_data: list = server.receive_data()
     server.close()
     print("Got data from RPi:")
     print(obstacle_data)
-
+    
     obstacles = parse_obstacle_data(obstacle_data)
     if also_run_simulator:
         app = AlgoSimulator(obstacles)
@@ -79,7 +79,7 @@ def run_minimal(also_run_simulator):
     app = AlgoMinimal(obstacles)
     app.init()
     app.execute()
-
+    
     # Send the list of commands over.
     print("Sending list of commands to RPi...")
     commands = app.robot.convert_all_commands()

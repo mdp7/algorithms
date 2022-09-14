@@ -16,7 +16,7 @@ def main():
         server.close()
         sys.exit(1)
     print("Connection from PC established!\n")
-
+    
     # Then, we use this to connect to the PC's server.
     host = server.address[0]
     # Create a client to connect to the PC's server.
@@ -26,7 +26,7 @@ def main():
         print(e)
         server.close()
         sys.exit(1)
-
+    
     # Wait to connect to RPi.
     print(f"Attempting connection to PC at {host}:{4161}")
     while True:
@@ -41,7 +41,7 @@ def main():
             client.close()
             sys.exit(1)
     print("Connected to PC!\n")
-
+    
     # Send over the obstacle data to the PC.
     print("Sending obstacle data to PC...")
     # TODO: Send actual obstacle data to the PC.
@@ -49,7 +49,7 @@ def main():
     client.send_message(obstacle_data)
     client.close()
     print("Done!\n")
-
+    
     # Receive commands from the PC.
     print("Receiving robot commands from PC...")
     try:

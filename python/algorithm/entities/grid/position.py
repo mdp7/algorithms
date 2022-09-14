@@ -14,28 +14,28 @@ class Position:
         self.x = x
         self.y = y
         self.direction = direction
-
+    
     def __str__(self):
         return f"Position({(self.x // const.SCALING_FACTOR)}, {self.y // const.SCALING_FACTOR}, " \
                f"angle={self.direction})"
-
+    
     __repr__ = __str__
-
+    
     def xy(self):
         """
         Return the true x, y coordinates of the current Position.
         """
         return self.x, self.y
-
+    
     def xy_dir(self):
         return *self.xy(), self.direction
-
+    
     def xy_pygame(self):
         """
         Return the x, y coordinates in terms of Pygame coordinates. Useful for drawing on screen.
         """
         return self.x, const.GRID_LENGTH - self.y
-
+    
     def copy(self):
         """
         Create a new copy of this Position.
@@ -49,11 +49,11 @@ class RobotPosition(Position):
         self.angle = angle
         if direction is not None:
             self.angle = direction.value
-
+    
     def __str__(self):
         return f"RobotPosition({super().__str__()}, angle={self.angle})"
-
+    
     __repr__ = __str__
-
+    
     def copy(self):
         return RobotPosition(self.x, self.y, self.direction, self.angle)

@@ -9,17 +9,17 @@ class Command(ABC):
         self.time = time  # Time in seconds in which this command is carried out.
         self.ticks = math.ceil(time * const.FRAMES)  # Number of frame ticks that this command will take.
         self.total_ticks = self.ticks  # Keep track of original total ticks.
-
+    
     def tick(self):
         self.ticks -= 1
-
+    
     @abstractmethod
     def process_one_tick(self, robot):
         """
         Overriding method must call tick().
         """
         pass
-
+    
     @abstractmethod
     def apply_on_pos(self, curr_pos):
         """
@@ -29,7 +29,7 @@ class Command(ABC):
         This method should return itself.
         """
         pass
-
+    
     @abstractmethod
     def convert_to_message(self):
         """
