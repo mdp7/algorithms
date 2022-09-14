@@ -9,6 +9,7 @@ class Node:
         self.cell_pos = cell_pos
         self.g = 0.
         self.h = 0.
+        self.move = None
         self.open = False
         self.close = False
         self.predecessor: Union[Node, None] = None
@@ -18,3 +19,9 @@ class Node:
     
     def __cmp__(self, other):
         return self.score().__cmp__(other.score())
+    
+    def __gt__(self, other):
+        return self.score().__gt__(other.score())
+    
+    def __str__(self):
+        return f'{self.cell_pos}, g: {self.g}, h: {self.h}, open: {self.open}'

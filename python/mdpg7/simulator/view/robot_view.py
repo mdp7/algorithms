@@ -4,7 +4,6 @@ import pygame
 
 from mdpg7.config.constants import SimulatorConst
 
-
 image = pygame.image.load(os.path.join('assets', 'Car.png'))
 
 

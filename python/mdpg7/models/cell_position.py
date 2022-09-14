@@ -10,7 +10,7 @@ class CellPosition:
     
     def cell_pos2d(self):
         return self.cell_x, self.cell_y
-        
+    
     def pos(self):
         return cell_pos_to_pos(self.cell_pos2d())
     

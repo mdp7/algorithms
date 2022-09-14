@@ -4,13 +4,10 @@ pathfinder should be isolated from simulator
 
 import itertools
 import time
-from typing import List, Tuple
 
 from mdpg7.algorithm.simple_hybrid_astar import run_simple_hybrid_astar
 from mdpg7.models.arena import Arena
 from mdpg7.models.board import Board
-from mdpg7.models.node import Node
-from mdpg7.models.obstacle import Obstacle
 from mdpg7.models.robot import Robot
 from mdpg7.utils.math_utils import dist_pos
 
@@ -30,18 +27,34 @@ def compute_simple_hamiltonian_path(arena: Arena, robot: Robot):
     return min(permutations, key=path_distance)
 
 
+def get_path(board):
+    if not board.goal.close:
+        return
+    node = board.goal
+    while node is not None:
+        print(node)
+        node = node.predecessor
+
+
 def plan_paths(arena: Arena, robot: Robot):
     start = time.time()
     simple_hamiltonian_path = compute_simple_hamiltonian_path(arena, robot)
     print('Found hamiltonian path')
     print(simple_hamiltonian_path)
     
+    last_cell = robot.cell_pos
+    
     for obstacle in simple_hamiltonian_path:
         board = Board.from_arena(arena)
-        board.start = Node(robot.cell_pos)
-        board.goal = Node(obstacle.cell_pos)
+        next_cell = obstacle.get_target_position()
+        print(obstacle)
+        board.start = board.nodes[last_cell.cell_y][last_cell.cell_x][last_cell.facing]
+        board.goal = board.nodes[next_cell.cell_y][next_cell.cell_x][next_cell.facing]
         run_simple_hybrid_astar(board)
-        
+        get_path(board)
+        last_cell = next_cell
+        print()
+    
     end = time.time()
     print('Done path planning')
     print(f'Total time consumed: {(end - start) / 10e6:.2f} seconds')

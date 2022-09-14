@@ -28,8 +28,8 @@ class Board:
         valid = [[True for _ in range(cols)] for _ in range(rows)]
         for obstacle in arena.obstacles:
             center = ArenaConst.VIRTUAL_OBSTACLE_RADIUS  # 1
-            for dx in range(ArenaConst.VIRTUAL_OBSTACLE_RADIUS):  # 3
-                for dy in range(ArenaConst.VIRTUAL_OBSTACLE_RADIUS):  # 3
+            for dx in range(ArenaConst.VIRTUAL_OBSTACLE_RADIUS * 2 + 1):  # 3
+                for dy in range(ArenaConst.VIRTUAL_OBSTACLE_RADIUS * 2 + 1):  # 3
                     cell_x = dx - center + obstacle.cell_pos.cell_x
                     cell_y = dy - center + obstacle.cell_pos.cell_y
                     if 0 <= cell_x < cols and 0 <= cell_y < rows:
