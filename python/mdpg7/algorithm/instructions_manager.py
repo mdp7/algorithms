@@ -1,5 +1,14 @@
 from mdpg7.config.constants import Moves
 
+
+"""
+LF = 0
+FF = 1
+RF = 2
+LB = 3
+BB = 4
+RB = 5
+"""
 # Take picture symbol
 TAKE_PICTURE = '*'
 
@@ -21,7 +30,15 @@ def compress_instructions(instruction_list : list):
 
     return to_return
 
+def find_object_face():
+    # Scan, Move back 3x, Turn right, Forward, TL * 2
+    iList = ["*"] + [Moves.BB] * 3 + [Moves.RF] + [Moves.FF] + [Moves.LF] * 2
+    return compress_instructions(iList * 4)
+
+
 if __name__ == "__main__":
     iList = [Moves.BB] * 15 +  ["*", Moves.FF, Moves.LF, Moves.LF, Moves.LF, Moves.RB, Moves.RF]
     print(compress_instructions(iList))
+
+    print(find_object_face())
 
