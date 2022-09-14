@@ -22,6 +22,7 @@ class Obstacle:
         
         # Translate given coordinates to be in PyGame coordinates.
         self.pos = Position(x * const.SCALING_FACTOR, y * const.SCALING_FACTOR, direction)
+        self.target_pos = self.get_robot_target_pos()
         
         # Arrow to draw at the target coordinate.
         self.target_image = pygame.transform.scale(pygame.image.load("entities/assets/target-arrow-2.png"),
