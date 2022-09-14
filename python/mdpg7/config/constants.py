@@ -38,6 +38,7 @@ class RobotConst:
     START_X = 1
     START_Y = 1
     START_FACING = Facing.U
+    START_THETA = 90
     WIDTH = 20
     HEIGHT = 25
     
@@ -162,6 +163,8 @@ class SimulatorConst:
     
     ROBOT_WIDTH = RobotConst.WIDTH * WINDOW_SCALE_X
     ROBOT_HEIGHT = RobotConst.HEIGHT * WINDOW_SCALE_Y
+    
+    ROBOT_SPEED = WINDOW_CELL_WIDTH  # pixels per second
     
     FRAMES_PER_SECOND = 15
     

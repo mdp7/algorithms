@@ -86,10 +86,10 @@ def cell_pos_to_win_pos(cell_pos: Tuple[int, int]) -> Tuple[float, float]:
 
 
 def theta_to_facing(theta: float) -> Facing:
-    if -math.pi * 3 / 4 < theta <= -math.pi / 4:
+    if -135 < theta <= -45:
         return Facing.D
-    if -math.pi / 4 < theta <= math.pi / 4:
+    if -45 < theta <= 45:
         return Facing.R
-    if math.pi / 4 < theta <= math.pi * 3 / 4:
+    if 45 < theta <= 135:
         return Facing.U
     return Facing.L

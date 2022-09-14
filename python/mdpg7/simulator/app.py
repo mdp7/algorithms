@@ -14,8 +14,9 @@ from mdpg7.simulator.manager.display_default_map import draw_display_default_map
 from mdpg7.simulator.manager.display_result import handle_events_display_result
 from mdpg7.simulator.manager.find_path import handle_events_find_path
 from mdpg7.simulator.view.arena_view import draw_arena
-from mdpg7.simulator.view.robot_view import draw_robot
+from mdpg7.simulator.view.robot_view import draw_robot, RobotView, RobotViewCommand
 from mdpg7.utils.log_utils import print_warning, print_error
+from mdpg7.utils.position_utils import cell_x_to_win_x, cell_y_to_win_y
 
 
 class Simulator:
@@ -32,6 +33,9 @@ class Simulator:
         # algorithm attributes
         self.arena = None
         self.robot = None
+        self.command = None
+        self.commands = None
+        self.robot_view = None
     
     def init_display(self):
         print('Initializing pygame')
@@ -45,6 +49,10 @@ class Simulator:
         # algorithm
         self.arena = Arena()
         self.robot = Robot(CellPosition(RobotConst.START_X, RobotConst.START_Y, RobotConst.START_FACING))
+        self.command = None
+        self.commands = list()
+        self.robot_view = \
+            RobotView(cell_x_to_win_x(RobotConst.START_X), cell_y_to_win_y(RobotConst.START_Y), RobotConst.START_THETA)
     
     def init_map(self, map_index):
         print('Loading map to pygame')
@@ -125,3 +133,12 @@ class Simulator:
             sys.exit(1)
         
         self.clock.tick(SimulatorConst.FRAMES_PER_SECOND)
+        
+        assert SimulatorConst.FRAMES_PER_SECOND / SimulatorConst.ROBOT_SPEED
+        
+        if self.command is None and self.commands is not None and 0 < len(self.commands):
+            self.command = RobotViewCommand(self.commands.pop(0), self.robot_view)
+        
+        if self.command is not None:
+            self.command = self.command.forward()
+        

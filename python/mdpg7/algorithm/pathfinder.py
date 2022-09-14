@@ -8,6 +8,7 @@ import time
 from mdpg7.algorithm.simple_hybrid_astar import run_simple_hybrid_astar
 from mdpg7.models.arena import Arena
 from mdpg7.models.board import Board
+from mdpg7.models.command import Command
 from mdpg7.models.robot import Robot
 from mdpg7.utils.math_utils import dist_pos
 
@@ -31,9 +32,18 @@ def get_path(board):
     if not board.goal.close:
         return
     node = board.goal
-    while node is not None:
-        print(node)
+    commands = list()
+    command = None
+    while node.predecessor is not None:
+        if command is None or command.move != node.move:
+            command = Command(node.move)
+            commands.append(command)
+        else:
+            command.inc_repeat()
         node = node.predecessor
+    commands.reverse()
+    print(commands)
+    return commands
 
 
 def plan_paths(arena: Arena, robot: Robot):
@@ -44,17 +54,18 @@ def plan_paths(arena: Arena, robot: Robot):
     
     last_cell = robot.cell_pos
     
+    commands = list()
     for obstacle in simple_hamiltonian_path:
         board = Board.from_arena(arena)
         next_cell = obstacle.get_target_position()
-        print(obstacle)
         board.start = board.nodes[last_cell.cell_y][last_cell.cell_x][last_cell.facing]
         board.goal = board.nodes[next_cell.cell_y][next_cell.cell_x][next_cell.facing]
         run_simple_hybrid_astar(board)
-        get_path(board)
+        commands.extend(get_path(board))
         last_cell = next_cell
-        print()
     
     end = time.time()
     print('Done path planning')
-    print(f'Total time consumed: {(end - start) / 10e6:.2f} seconds')
+    print(f'Total time consumed: {(end - start):.2f} seconds')
+    # print(commands)
+    return commands

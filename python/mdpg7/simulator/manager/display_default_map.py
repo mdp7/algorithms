@@ -10,7 +10,8 @@ def handle_events_display_default_map(simulator, events):
             if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN:
                 print('Start path planning')
                 simulator.mode = SimulatorConst.MODE_FIND_PATH
-                plan_paths(simulator.arena, simulator.robot)  # TODO: run path planning in a separate thread
+                simulator.commands = plan_paths(simulator.arena, simulator.robot)
+                # TODO: run path planning in a separate thread
 
 
 def draw_display_default_map(simulator):
