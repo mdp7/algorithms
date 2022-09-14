@@ -6,7 +6,7 @@ from mdpg7.config.constants import Color, RobotConst
 from mdpg7.config.constants import SimulatorConst
 from mdpg7.config.default_arena import ARENAS
 from mdpg7.models.arena import Arena
-from mdpg7.models.position import Position
+from mdpg7.models.cell_position import CellPosition
 from mdpg7.models.robot import Robot
 from mdpg7.simulator.manager.customize_map import draw_customize_map, handle_events_customize_map
 from mdpg7.simulator.manager.display_animation import handle_events_display_animation
@@ -15,7 +15,7 @@ from mdpg7.simulator.manager.display_result import handle_events_display_result
 from mdpg7.simulator.manager.find_path import handle_events_find_path
 from mdpg7.simulator.view.arena_view import draw_arena
 from mdpg7.simulator.view.robot_view import draw_robot
-from mdpg7.utils.log_utils import print_warning
+from mdpg7.utils.log_utils import print_warning, print_error
 
 
 class Simulator:
@@ -35,6 +35,7 @@ class Simulator:
     
     def init_display(self):
         print('Initializing pygame')
+        
         # UI
         pygame.init()
         self.running = True
@@ -43,8 +44,7 @@ class Simulator:
         
         # algorithm
         self.arena = Arena()
-        self.robot = Robot()
-        self.robot.pos = Position(RobotConst.START_X, RobotConst.START_Y, RobotConst.START_T)
+        self.robot = Robot(CellPosition(RobotConst.START_X, RobotConst.START_Y, RobotConst.START_FACING))
     
     def init_map(self, map_index):
         print('Loading map to pygame')
@@ -53,7 +53,7 @@ class Simulator:
             print('Default map is not loaded, waiting for user input')
             self.mode = SimulatorConst.MODE_CUSTOMIZE_MAP
         elif map_index < 0 or len(ARENAS) <= map_index:
-            print('Invalid default map, switching to customize mode')
+            print_warning('Invalid default map, switching to customize mode')
             self.mode = SimulatorConst.MODE_CUSTOMIZE_MAP
         else:
             self.arena = ARENAS[map_index]
@@ -62,7 +62,7 @@ class Simulator:
     def handle_events(self):
         if not self.running or self.mode == SimulatorConst.MODE_NULL:
             # this line shouldn't be reached
-            print_warning('ERROR: handling events while pygame is not running')
+            print_error('ERROR: handling events while pygame is not running')
             sys.exit(1)
         
         events = pygame.event.get()
@@ -87,13 +87,13 @@ class Simulator:
             handle_events_display_result(self, events)
         else:
             # this line shouldn't be reached
-            print_warning('ERROR: invalid simulator mode')
+            print_error('ERROR: invalid simulator mode')
             sys.exit(1)
     
     def draw(self):
         if not self.running or self.mode == SimulatorConst.MODE_NULL:
             # this line shouldn't be reached
-            print_warning('ERROR: drawing while pygame is not running')
+            print_error('ERROR: drawing while pygame is not running')
             sys.exit(1)
         
         self.surface.fill(Color.WHITE)
@@ -111,7 +111,7 @@ class Simulator:
             pass
         else:
             # this line shouldn't be reached
-            print_warning('ERROR: invalid simulator mode')
+            print_error('ERROR: invalid simulator mode')
             sys.exit(1)
         
         draw_robot(self)
@@ -119,9 +119,9 @@ class Simulator:
         pygame.display.flip()
     
     def tick(self):
-        if not self.running or self.mode == SimulatorConst.MODE_NULL:
+        if not self.running or self.mode == SimulatorConst.MODE_NULL or self.clock is None:
             # this line shouldn't be reached
-            print_warning('ERROR: clock ticking while pygame is not running')
+            print_error('ERROR: clock ticking while pygame is not running')
             sys.exit(1)
         
         self.clock.tick(SimulatorConst.FRAMES_PER_SECOND)

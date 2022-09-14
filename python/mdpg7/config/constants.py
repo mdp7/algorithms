@@ -1,5 +1,25 @@
-import math
-from enum import Enum
+from enum import Enum, IntEnum
+
+
+class Moves(IntEnum):
+    LF = 0
+    FF = 1
+    RF = 2
+    LB = 3
+    BB = 4
+    RB = 5
+
+
+class LineDirection(IntEnum):
+    HORIZONTAL = 0
+    VERTICAL = 1
+
+
+class Facing(IntEnum):
+    R = 0
+    U = 1
+    L = 2
+    D = 3
 
 
 class ArenaConst:
@@ -9,16 +29,17 @@ class ArenaConst:
     CELL_HEIGHT = 10  # cm
     ARENA_WIDTH = 200  # cm
     ARENA_HEIGHT = 200  # cm
-    ROBOT_OBSTACLE_CENTER_SAFE_DISTANCE = 20
-    ROBOT_OBSTACLE_CENTER_DETECT_DISTANCE = 30
+    
+    VIRTUAL_OBSTACLE_RADIUS = 1
+    DETECT_CELL_DISTANCE = 3
 
 
 class RobotConst:
-    START_X = 15
-    START_Y = 15
-    START_T = math.pi / 2
-    WIDTH = 30
-    HEIGHT = 30
+    START_X = 1
+    START_Y = 1
+    START_FACING = Facing.U
+    WIDTH = 20
+    HEIGHT = 25
     
     MOVES_PENALTY = [
         3.5,  # LF
@@ -38,22 +59,6 @@ class RobotConst:
         [(-1, 0), (0, 1), (1, 0), (0, -1)],
         [(-2, -2), (2, -2), (2, 2), (-2, 2)]
     ]
-
-
-class Moves(Enum):
-    LF = 0
-    FF = 1
-    RF = 2
-    LB = 3
-    BB = 4
-    RB = 5
-
-
-class Facing(Enum):
-    R = 0
-    U = 1
-    L = 2
-    D = 3
 
 
 class ObstacleImage(Enum):
@@ -115,7 +120,7 @@ class SimulatorConst:
     WINDOW_IMAGE_HEIGHT_RADIUS = WINDOW_IMAGE_HEIGHT / 2
     WINDOW_SCALE_X = WINDOW_WIDTH / ArenaConst.ARENA_WIDTH
     WINDOW_SCALE_Y = WINDOW_HEIGHT / ArenaConst.ARENA_HEIGHT
-    WINDOW_ROBOT_OBSTACLE_CENTER_SAFE_DISTANCE = ArenaConst.ROBOT_OBSTACLE_CENTER_SAFE_DISTANCE * WINDOW_SCALE_X
+    # WINDOW_ROBOT_OBSTACLE_CENTER_SAFE_DISTANCE = ArenaConst.ROBOT_OBSTACLE_CENTER_SAFE_DISTANCE * WINDOW_SCALE_X
     
     ROBOT_WIDTH = RobotConst.WIDTH * WINDOW_SCALE_X
     ROBOT_HEIGHT = RobotConst.HEIGHT * WINDOW_SCALE_Y
