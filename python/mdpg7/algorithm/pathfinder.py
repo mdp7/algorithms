@@ -71,6 +71,5 @@ def plan_paths(arena: Arena, robot: Robot):
     end = time.time()
     print('Done path planning')
     print(f'Total time consumed: {(end - start):.2f} seconds')
-    commands_to_message(commands)
     # print(commands)
     return commands
