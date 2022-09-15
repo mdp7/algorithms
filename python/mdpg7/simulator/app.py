@@ -135,10 +135,9 @@ class Simulator:
         self.clock.tick(SimulatorConst.FRAMES_PER_SECOND)
         
         assert SimulatorConst.FRAMES_PER_SECOND / SimulatorConst.ROBOT_SPEED
-
+        
         if self.command is None and self.commands is not None and 0 < len(self.commands):
             self.command = RobotViewCommand(self.commands.pop(0), self.robot_view)
-
+        
         if self.command is not None:
             self.command = self.command.forward()
-        

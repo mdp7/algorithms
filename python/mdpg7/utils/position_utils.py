@@ -4,7 +4,6 @@ pos is a float representing the position of a point on the actual arena with ori
 win_pos is a float representing the position of a point on the simulator with origin at top-left
 cell_pos is an int representing the position of a cell on the arena board with origin at bottom-left
 """
-import math
 from typing import Tuple
 
 from mdpg7.config.constants import ArenaConst, SimulatorConst, Facing

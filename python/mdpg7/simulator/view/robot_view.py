@@ -4,7 +4,7 @@ from typing import Union
 
 import pygame
 
-from mdpg7.config.constants import SimulatorConst, Moves, Facing, RobotConst
+from mdpg7.config.constants import SimulatorConst, Moves, RobotConst
 from mdpg7.utils.position_utils import theta_to_facing
 
 
@@ -54,7 +54,7 @@ class RobotViewCommand:
             radius = SimulatorConst.ROBOT_TURN_RADIUS
             step = ((math.pi / 2) * command.repeat) / self.ticks
             step_t = 90 * command.repeat / self.ticks
-            
+        
         self.fx = lambda t: fdx(radius, step, t) + bx
         self.fy = lambda t: fdy(radius, step, t) + by
         self.ft = lambda t: RobotConst.MOVES_SIGN_T[command.move] * step_t * t + bt

@@ -53,7 +53,7 @@ class RobotConst:
     ]
     
     CHANGE_MOVES_PENALTY = 1.5
-
+    
     MOVES_FUNC_DXY = [
         [
             (lambda r, s, t: r * math.sin(s * t), lambda r, s, t: r * math.cos(s * t) - r),
