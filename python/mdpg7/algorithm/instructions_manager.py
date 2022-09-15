@@ -22,7 +22,7 @@ def compress_instructions(instruction_list : list):
             counter += 1
 
         else:
-            to_return = (to_return + f"{pre}/") if pre == "*" else (to_return + f"{pre}{counter}/")
+            to_return = (to_return + f"{pre}/") if pre == TAKE_PICTURE else (to_return + f"{pre},{counter}/")
             counter = 1
             pre = instruction_list[i]
 
@@ -42,6 +42,8 @@ def commands_to_message(commands : list):
     print("Message: ", to_return)
 
     return to_return
+
+
 def find_object_face():
     # Scan, Move back 3x, Turn right, Forward, TL * 2
     iList = ["*"] + [Moves.BB] * 3 + [Moves.RF] + [Moves.FF] + [Moves.LF] * 2
@@ -52,5 +54,5 @@ if __name__ == "__main__":
     iList = [Moves.BB] * 15 +  ["*", Moves.FF, Moves.LF, Moves.LF, Moves.LF, Moves.RB, Moves.RF]
     print(compress_instructions(iList))
 
-    print(find_object_face())
+    # print(find_object_face())
 
