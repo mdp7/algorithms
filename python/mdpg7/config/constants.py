@@ -1,3 +1,4 @@
+import math
 from enum import Enum, IntEnum
 
 
@@ -39,8 +40,8 @@ class RobotConst:
     START_Y = 1
     START_FACING = Facing.U
     START_THETA = 90
-    WIDTH = 20
-    HEIGHT = 25
+    WIDTH = 25
+    HEIGHT = 20
     
     MOVES_PENALTY = [
         3.5,  # LF
@@ -52,6 +53,47 @@ class RobotConst:
     ]
     
     CHANGE_MOVES_PENALTY = 1.5
+
+    MOVES_FUNC_DXY = [
+        [
+            (lambda r, s, t: r * math.sin(s * t), lambda r, s, t: r * math.cos(s * t) - r),
+            (lambda r, s, t: r * math.cos(s * t) - r, lambda r, s, t: -r * math.sin(s * t)),
+            (lambda r, s, t: -r * math.sin(s * t), lambda r, s, t: r - r * math.cos(s * t)),
+            (lambda r, s, t: r - r * math.cos(s * t), lambda r, s, t: r * math.sin(s * t)),
+        ],
+        [
+            (lambda r, s, t: s * t, lambda r, s, t: 0),
+            (lambda r, s, t: 0, lambda r, s, t: -s * t),
+            (lambda r, s, t: -s * t, lambda r, s, t: 0),
+            (lambda r, s, t: 0, lambda r, s, t: s * t),
+        ],
+        [
+            (lambda r, s, t: r * math.sin(s * t), lambda r, s, t: r - r * math.cos(s * t)),
+            (lambda r, s, t: r - r * math.cos(s * t), lambda r, s, t: -r * math.sin(s * t)),
+            (lambda r, s, t: -r * math.sin(s * t), lambda r, s, t: r * math.cos(s * t) - r),
+            (lambda r, s, t: r * math.cos(s * t) - r, lambda r, s, t: r * math.sin(s * t)),
+        ],
+        [
+            (lambda r, s, t: -r * math.sin(s * t), lambda r, s, t: r * math.cos(s * t) - r),
+            (lambda r, s, t: r * math.cos(s * t) - r, lambda r, s, t: r * math.sin(s * t)),
+            (lambda r, s, t: r * math.sin(s * t), lambda r, s, t: r - r * math.cos(s * t)),
+            (lambda r, s, t: r - r * math.cos(s * t), lambda r, s, t: -r * math.sin(s * t)),
+        ],
+        [
+            (lambda r, s, t: -s * t, lambda r, s, t: 0),
+            (lambda r, s, t: 0, lambda r, s, t: s * t),
+            (lambda r, s, t: s * t, lambda r, s, t: 0),
+            (lambda r, s, t: 0, lambda r, s, t: -s * t),
+        ],
+        [
+            (lambda r, s, t: -r * math.sin(s * t), lambda r, s, t: r - r * math.cos(s * t)),
+            (lambda r, s, t: r - r * math.cos(s * t), lambda r, s, t: r * math.sin(s * t)),
+            (lambda r, s, t: r * math.sin(s * t), lambda r, s, t: r * math.cos(s * t) - r),
+            (lambda r, s, t: r * math.cos(s * t) - r, lambda r, s, t: -r * math.sin(s * t)),
+        ],
+    ]
+    
+    MOVES_SIGN_T = [1, 0, -1, -1, 0, 1]
     
     # MOVES_DXY[moves][facing]
     MOVES_DXY = [
@@ -164,7 +206,8 @@ class SimulatorConst:
     ROBOT_WIDTH = RobotConst.WIDTH * WINDOW_SCALE_X
     ROBOT_HEIGHT = RobotConst.HEIGHT * WINDOW_SCALE_Y
     
-    ROBOT_SPEED = WINDOW_CELL_WIDTH  # pixels per second
+    ROBOT_SPEED = WINDOW_CELL_WIDTH * 9  # pixels per second
+    ROBOT_TURN_RADIUS = 2 * WINDOW_CELL_WIDTH
     
     FRAMES_PER_SECOND = 15
     

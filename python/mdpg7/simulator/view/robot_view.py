@@ -1,9 +1,10 @@
+import math
 import os
 from typing import Union
 
 import pygame
 
-from mdpg7.config.constants import SimulatorConst, Moves, Facing
+from mdpg7.config.constants import SimulatorConst, Moves, Facing, RobotConst
 from mdpg7.utils.position_utils import theta_to_facing
 
 
@@ -20,6 +21,16 @@ class RobotView:
     
     def facing(self):
         return theta_to_facing(self.theta)
+    
+    def set_theta(self, theta):
+        self.theta = theta
+        self.regularize_theta()
+    
+    def regularize_theta(self):
+        while self.theta > 180:
+            self.theta -= 360
+        while self.theta <= -180:
+            self.theta += 360
 
 
 class RobotViewCommand:
@@ -27,87 +38,37 @@ class RobotViewCommand:
     def __init__(self, command, robot_view):
         self.robot_view = robot_view
         self.tick = 0
-        self.dxs = list()
-        self.dys = list()
         facing = robot_view.facing()
-        try:
-            if command.move in (Moves.FF, Moves.BB):
-                self.ticks = int((SimulatorConst.FRAMES_PER_SECOND * SimulatorConst.WINDOW_CELL_WIDTH * command.repeat) // \
-                    SimulatorConst.ROBOT_SPEED)
-                dist = SimulatorConst.WINDOW_CELL_WIDTH * command.repeat
-                step = dist / self.ticks
-                self.dest_t = 0
-                if facing == Facing.R and command.move == Moves.FF or facing == Facing.L and command.move == Moves.BB:
-                    self.dxs = [step for _ in range(self.ticks)]
-                    self.dys = [0 for _ in range(self.ticks)]
-                    self.dest_x = robot_view.win_x + dist
-                    self.dest_y = robot_view.win_y
-                if facing == Facing.R and command.move == Moves.BB or facing == Facing.L and command.move == Moves.FF:
-                    self.dxs = [-step for _ in range(self.ticks)]
-                    self.dys = [0 for _ in range(self.ticks)]
-                    self.dest_x = robot_view.win_x - dist
-                    self.dest_y = robot_view.win_y
-                if facing == Facing.U and command.move == Moves.FF or facing == Facing.D and command.move == Moves.BB:
-                    self.dxs = [0 for _ in range(self.ticks)]
-                    self.dys = [-step for _ in range(self.ticks)]
-                    self.dest_x = robot_view.win_x
-                    self.dest_y = robot_view.win_y - dist
-                if facing == Facing.U and command.move == Moves.BB or facing == Facing.D and command.move == Moves.FF:
-                    self.dxs = [0 for _ in range(self.ticks)]
-                    self.dys = [step for _ in range(self.ticks)]
-                    self.dest_x = robot_view.win_x
-                    self.dest_y = robot_view.win_y + dist
-            else:
-                self.tick = 0
-                self.ticks = 1
-                if facing == Facing.R and command.move == Moves.LF or facing == Facing.L and command.move == Moves.RB:
-                    self.dest_x = robot_view.win_x + 2 * 30
-                    self.dest_y = robot_view.win_y - 2 * 30
-                    self.dest_t = 90
-                if facing == Facing.R and command.move == Moves.RF or facing == Facing.L and command.move == Moves.LB:
-                    self.dest_x = robot_view.win_x + 2 * 30
-                    self.dest_y = robot_view.win_y + 2 * 30
-                    self.dest_t = -90
-                if facing == Facing.R and command.move == Moves.LB or facing == Facing.L and command.move == Moves.RF:
-                    self.dest_x = robot_view.win_x - 2 * 30
-                    self.dest_y = robot_view.win_y - 2 * 30
-                    self.dest_t = -90
-                if facing == Facing.R and command.move == Moves.RB or facing == Facing.L and command.move == Moves.LF:
-                    self.dest_x = robot_view.win_x - 2 * 30
-                    self.dest_y = robot_view.win_y + 2 * 30
-                    self.dest_t = 90
-
-                if facing == Facing.U and command.move == Moves.LF or facing == Facing.D and command.move == Moves.RB:
-                    self.dest_x = robot_view.win_x - 2 * 30
-                    self.dest_y = robot_view.win_y - 2 * 30
-                    self.dest_t = 90
-                if facing == Facing.U and command.move == Moves.RF or facing == Facing.D and command.move == Moves.LB:
-                    self.dest_x = robot_view.win_x + 2 * 30
-                    self.dest_y = robot_view.win_y - 2 * 30
-                    self.dest_t = -90
-                if facing == Facing.U and command.move == Moves.LB or facing == Facing.D and command.move == Moves.RF:
-                    self.dest_x = robot_view.win_x - 2 * 30
-                    self.dest_y = robot_view.win_y + 2 * 30
-                    self.dest_t = -90
-                if facing == Facing.U and command.move == Moves.RB or facing == Facing.D and command.move == Moves.LF:
-                    self.dest_x = robot_view.win_x + 2 * 30
-                    self.dest_y = robot_view.win_y + 2 * 30
-                    self.dest_t = 90
-            print(command, robot_view.facing())
-
-        except:
-            print("Taking picture!")
+        
+        fdx, fdy = RobotConst.MOVES_FUNC_DXY[command.move][facing]
+        bx, by, bt = robot_view.win_x, robot_view.win_y, robot_view.theta
+        if command.move in (Moves.FF, Moves.BB):
+            dist = SimulatorConst.WINDOW_CELL_WIDTH * command.repeat
+            self.ticks = int((SimulatorConst.FRAMES_PER_SECOND * dist) // SimulatorConst.ROBOT_SPEED)
+            radius = 0
+            step = dist / self.ticks
+            step_t = 0
+        else:
+            dist = SimulatorConst.WINDOW_CELL_WIDTH * math.pi * command.repeat
+            self.ticks = int((SimulatorConst.FRAMES_PER_SECOND * dist) // SimulatorConst.ROBOT_SPEED)
+            radius = SimulatorConst.ROBOT_TURN_RADIUS
+            step = ((math.pi / 2) * command.repeat) / self.ticks
+            step_t = 90 * command.repeat / self.ticks
+            
+        self.fx = lambda t: fdx(radius, step, t) + bx
+        self.fy = lambda t: fdy(radius, step, t) + by
+        self.ft = lambda t: RobotConst.MOVES_SIGN_T[command.move] * step_t * t + bt
+        
+        print(command)
     
     def forward(self) -> Union['RobotViewCommand', None]:
         self.tick += 1
+        self.robot_view.win_x = self.fx(self.tick)
+        self.robot_view.win_y = self.fy(self.tick)
+        self.robot_view.set_theta(self.ft(self.tick))
         if self.tick != self.ticks:
-            self.robot_view.win_x += self.dxs[self.tick - 1]
-            self.robot_view.win_y += self.dys[self.tick - 1]
             return self
         else:
-            self.robot_view.win_x = self.dest_x
-            self.robot_view.win_y = self.dest_y
-            self.robot_view.theta += self.dest_t
             return None
 
 
