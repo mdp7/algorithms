@@ -7,6 +7,7 @@ from mdpg7.config.constants import SimulatorConst
 from mdpg7.config.default_arena import ARENAS
 from mdpg7.models.arena import Arena
 from mdpg7.models.cell_position import CellPosition
+from mdpg7.models.command import Command
 from mdpg7.models.robot import Robot
 from mdpg7.simulator.manager.customize_map import draw_customize_map, handle_events_customize_map
 from mdpg7.simulator.manager.display_animation import handle_events_display_animation
@@ -137,7 +138,12 @@ class Simulator:
         assert SimulatorConst.FRAMES_PER_SECOND / SimulatorConst.ROBOT_SPEED
         
         if self.command is None and self.commands is not None and 0 < len(self.commands):
-            self.command = RobotViewCommand(self.commands.pop(0), self.robot_view)
+            command = self.commands.pop(0)
+            if not isinstance(command, Command):
+                [self.clock.tick(SimulatorConst.FRAMES_PER_SECOND) for _ in range(SimulatorConst.FRAMES_PER_SECOND)]
+                return
+                
+            self.command = RobotViewCommand(command, self.robot_view)
         
         if self.command is not None:
             self.command = self.command.forward()
