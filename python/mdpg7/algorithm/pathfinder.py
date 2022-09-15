@@ -11,6 +11,7 @@ from mdpg7.models.board import Board
 from mdpg7.models.command import Command
 from mdpg7.models.robot import Robot
 from mdpg7.utils.math_utils import dist_pos
+from mdpg7.algorithm.instructions_manager import TAKE_PICTURE, commands_to_message
 
 
 def compute_simple_hamiltonian_path(arena: Arena, robot: Robot):
@@ -41,7 +42,10 @@ def get_path(board):
         else:
             command.inc_repeat()
         node = node.predecessor
+
+    # Add take pic char
     commands.reverse()
+    commands.append(TAKE_PICTURE)
     print(commands)
     return commands
 
@@ -67,5 +71,6 @@ def plan_paths(arena: Arena, robot: Robot):
     end = time.time()
     print('Done path planning')
     print(f'Total time consumed: {(end - start):.2f} seconds')
+    commands_to_message(commands)
     # print(commands)
     return commands

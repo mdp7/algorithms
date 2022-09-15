@@ -13,6 +13,7 @@ RB = 5
 TAKE_PICTURE = '*'
 
 def compress_instructions(instruction_list : list):
+    print("Compressing Instructions!")
     to_return = ""
     counter = 1
     pre = instruction_list[0]
@@ -30,6 +31,17 @@ def compress_instructions(instruction_list : list):
 
     return to_return
 
+def commands_to_message(commands : list):
+    index = 0
+    to_return = ""
+    while(index < len(commands)):
+        to_return = to_return + f"{commands[index].move},{commands[index].repeat}/" if commands[index] != TAKE_PICTURE else to_return + f"{TAKE_PICTURE}/"
+        index += 1
+
+    to_return += '!'
+    print("Message: ", to_return)
+
+    return to_return
 def find_object_face():
     # Scan, Move back 3x, Turn right, Forward, TL * 2
     iList = ["*"] + [Moves.BB] * 3 + [Moves.RF] + [Moves.FF] + [Moves.LF] * 2
