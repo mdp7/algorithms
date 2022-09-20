@@ -7,8 +7,8 @@ class ScanCommand(Command):
         self.obj_index = obj_index
     
     def __str__(self):
-        return f"ScanCommand(time={self.time, self.obj_index})"
-    
+        # return f"ScanCommand(time={self.time, self.obj_index})"
+        return "*"
     __repr__ = __str__
     
     def process_one_tick(self, robot):

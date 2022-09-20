@@ -69,35 +69,16 @@ class Brain:
                     index += 1
                     total_distance += 10
                 command = StraightCommand(new_length)
-                input_command = 1 if new_length >= 0 else 4
-                instruction_str = self.convert_instruction(instruction_str, input_command, abs(new_length)//const.GRID_CELL_LENGTH)
-
                 new_commands.append(command)
             else:
                 new_commands.append(command)
                 index += 1
-                if isinstance(command, TurnCommand):
-                    total_distance += 31
-                    # Right turn
-                    if command.angle <= 0:
-                        input_command = 2 if not command.rev else 5
-                    # Left turn
-                    else:
-                        input_command = 0 if not command.rev else 3
-                    instruction_str = self.convert_instruction(instruction_str, input_command, 1)
-
-                else:
-                    instruction_str += '*/'
-
+                total_distance += (const.ROBOT_TURN_RADIUS)//const.SCALING_FACTOR * math.pi/2
 
         print("\n", new_commands)
         print(f"Instruction String: {instruction_str}")
         self.commands = new_commands
         print(f"Done! Distance Travelled: {total_distance}cm  Time taken: {total_distance/(10/3)}s")
-
-    def convert_instruction(self, s, command_str, num):
-        s = s + str(command_str) + ',' + str(num) + '/'
-        return s
 
     def plan_path(self):
         print("-" * 40)

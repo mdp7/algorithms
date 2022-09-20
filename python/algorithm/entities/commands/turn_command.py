@@ -21,8 +21,10 @@ class TurnCommand(Command):
         self.rev = rev
     
     def __str__(self):
-        return f"TurnCommand({self.angle:.2f}degrees, {self.total_ticks} ticks, rev={self.rev})"
-    
+        # return f"TurnCommand({self.angle:.2f}degrees, {self.total_ticks} ticks, rev={self.rev})"
+        move_string = "FORWARD TURN" if self.rev == False else "BACKWARD TURN"
+        dir_string = "RIGHT" if int(self.angle) == -90 else "LEFT"
+        return f"{move_string} {dir_string}"
     __repr__ = __str__
     
     def process_one_tick(self, robot):
@@ -47,12 +49,19 @@ class TurnCommand(Command):
         Note that ∆θ is in radians.
         """
         assert isinstance(curr_pos, RobotPosition), print("Cannot apply turn command on non-robot positions!")
-        
+        """
+        Change in x,y coordinate depends on robot facing direction. Current implementation we assume a
+        fixed change of 25/35
+        """
+        # print(curr_pos.angle, self.angle)
         # Get change in (x, y) coordinate.
-        x_change = const.ROBOT_X_TURN_DELTA * (math.sin(math.radians(curr_pos.angle + self.angle)) -
+        x_change = const.ROBOT_TURN_RADIUS * (math.sin(math.radians(curr_pos.angle + self.angle)) -
                                               math.sin(math.radians(curr_pos.angle)))
-        y_change = const.ROBOT_Y_TURN_DELTA * (math.cos(math.radians(curr_pos.angle + self.angle)) -
+        y_change = const.ROBOT_TURN_RADIUS * (math.cos(math.radians(curr_pos.angle + self.angle)) -
                                               math.cos(math.radians(curr_pos.angle)))
+
+        # x_change = const.ROBOT_TURN_DELTA_35 if (curr_pos.direction == Direction.TOP or curr_pos.direction == Direction.BOTTOM ) else const.ROBOT_TURN_DELTA_25
+        # y_change = const.ROBOT_TURN_DELTA_35 if (curr_pos.direction == Direction.LEFT or curr_pos.direction == Direction.RIGHT) else const.ROBOT_TURN_DELTA_25
         
         if self.angle < 0 and not self.rev:  # Wheels to right moving forward.
             curr_pos.x -= x_change
