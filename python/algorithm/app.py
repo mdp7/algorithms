@@ -122,7 +122,7 @@ class AlgoSimulator(AlgoApp):
                     # Inform user that it is finding path...
                     pygame.display.set_caption("Calculating path...")
                     font = pygame.font.SysFont("arial", 35)
-                    text = font.render("Calculating path...", True, colors.WHITE)
+                    text = font.render("Calculating path...", True, colors.BLACK)
                     text_rect = text.get_rect()
                     text_rect.center = const.WINDOW_SIZE[0] / 2, const.WINDOW_SIZE[1] / 2
                     self.screen.blit(text, text_rect)

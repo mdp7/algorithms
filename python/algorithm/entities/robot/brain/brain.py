@@ -6,6 +6,7 @@ from typing import Tuple
 from algorithm import const
 from algorithm.entities.commands.scan_command import ScanCommand
 from algorithm.entities.commands.straight_command import StraightCommand
+from algorithm.entities.commands.turn_command import TurnCommand
 from algorithm.entities.grid.obstacle import Obstacle
 from algorithm.entities.robot.brain.mod_a_star import ModifiedAStar
 
@@ -14,13 +15,13 @@ class Brain:
     def __init__(self, robot, grid):
         self.robot = robot
         self.grid = grid
-        
+
         # Compute the simple Hamiltonian path for all obstacles
         self.simple_hamiltonian = tuple()
-        
+
         # Create all the commands required to finish the course.
         self.commands = deque()
-    
+
     def compute_simple_hamiltonian_path(self) -> Tuple[Obstacle]:
         """
         Get the Hamiltonian Path to all points with the best possible effort.
@@ -28,26 +29,26 @@ class Brain:
         """
         # Generate all possible permutations for the image obstacles
         perms = list(itertools.permutations(self.grid.obstacles))
-        
+
         # Get the path that has the least distance travelled.
         def calc_distance(path):
             # Create all target points, including the start.
             targets = [self.robot.pos.xy_pygame()]
             for obstacle in path:
                 targets.append(obstacle.target_pos.xy_pygame())
-            
+
             dist = 0
             for i in range(len(targets) - 1):
                 dist += math.sqrt(((targets[i][0] - targets[i + 1][0]) ** 2) +
                                   ((targets[i][1] - targets[i + 1][1]) ** 2))
             return dist
-        
+
         simple = min(perms, key=calc_distance)
         print("Found a simple hamiltonian path:")
         for ob in simple:
             print(f"\t{ob}")
         return simple
-    
+
     def compress_paths(self):
         """
         Compress similar commands into one command.
@@ -57,6 +58,7 @@ class Brain:
         print("Compressing commands... ", end="")
         total_distance = 0
         index = 0
+        instruction_str = ""
         new_commands = deque()
         while index < len(self.commands):
             command = self.commands[index]
@@ -65,18 +67,38 @@ class Brain:
                 while index < len(self.commands) and isinstance(self.commands[index], StraightCommand):
                     new_length += self.commands[index].dist
                     index += 1
+                    total_distance += 10
                 command = StraightCommand(new_length)
+                input_command = 1 if new_length >= 0 else 4
+                instruction_str = self.convert_instruction(instruction_str, input_command, abs(new_length)//const.GRID_CELL_LENGTH)
+
                 new_commands.append(command)
-                total_distance += 10
             else:
                 new_commands.append(command)
                 index += 1
-                total_distance += 31
+                if isinstance(command, TurnCommand):
+                    total_distance += 31
+                    # Right turn
+                    if command.angle <= 0:
+                        input_command = 2 if not command.rev else 5
+                    # Left turn
+                    else:
+                        input_command = 0 if not command.rev else 3
+                    instruction_str = self.convert_instruction(instruction_str, input_command, 1)
+
+                else:
+                    instruction_str += '*/'
+
+
+        print("\n", new_commands)
+        print(f"Instruction String: {instruction_str}")
         self.commands = new_commands
-
-
         print(f"Done! Distance Travelled: {total_distance}cm  Time taken: {total_distance/(10/3)}s")
-    
+
+    def convert_instruction(self, s, command_str, num):
+        s = s + str(command_str) + ',' + str(num) + '/'
+        return s
+
     def plan_path(self):
         print("-" * 40)
         print("STARTING PATH COMPUTATION...")
