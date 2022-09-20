@@ -53,7 +53,7 @@ def find_object_face():
 
 
 if __name__ == "__main__":
-    iList = [Moves.BB] * 15 + ["*", Moves.FF, Moves.LF, Moves.LF, Moves.LF, Moves.RB, Moves.RF]
-    print(compress_instructions(iList))
+    # iList = [Moves.BB] * 15 + ["*", Moves.FF, Moves.LF, Moves.LF, Moves.LF, Moves.RB, Moves.RF]
+    # print(compress_instructions(iList))
     
-    # print(find_object_face())
+    print(find_object_face())

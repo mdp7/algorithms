@@ -55,6 +55,7 @@ class Brain:
         Helps to reduce the number of commands.
         """
         print("Compressing commands... ", end="")
+        total_distance = 0
         index = 0
         new_commands = deque()
         while index < len(self.commands):
@@ -66,11 +67,15 @@ class Brain:
                     index += 1
                 command = StraightCommand(new_length)
                 new_commands.append(command)
+                total_distance += 10
             else:
                 new_commands.append(command)
                 index += 1
+                total_distance += 31
         self.commands = new_commands
-        print("Done!")
+
+
+        print(f"Done! Distance Travelled: {total_distance}cm  Time taken: {total_distance/(10/3)}s")
     
     def plan_path(self):
         print("-" * 40)

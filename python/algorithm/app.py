@@ -82,9 +82,28 @@ class AlgoSimulator(AlgoApp):
                 self.obstacles.append(obstacle)
                 obs = self.parse_obstacle_data()
                 self.grid = Grid(obs)
+
+
+
+
             
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_DOWN:
+                if event.key == pygame.K_a:
+                    self.obstacles = [[25, 185, -90], [125, 185, -90], [105, 25, 180], [15, 115, -90], [125, 85, 180]]
+                    self.index += len(self.obstacles)
+                    for i, o in enumerate(self.obstacles):
+                        o.append(i)
+                    obs = self.parse_obstacle_data()
+                    self.grid = Grid(obs)
+
+                elif event.key == pygame.K_b:
+                    self.obstacles = [[25, 185, -90], [125, 185, -90], [105, 25, 0], [15, 115, -90], [125, 85, 180]]
+                    self.index += len(self.obstacles)
+                    for i, o in enumerate(self.obstacles):
+                        o.append(i)
+                    obs = self.parse_obstacle_data()
+                    self.grid = Grid(obs)
+                elif event.key == pygame.K_DOWN:
                     self.direction = Direction.BOTTOM
                     print(self.direction)
                 elif event.key == pygame.K_UP:
@@ -96,6 +115,9 @@ class AlgoSimulator(AlgoApp):
                 elif event.key == pygame.K_RIGHT:
                     self.direction = Direction.RIGHT
                     print(self.direction)
+                elif event.key == pygame.K_BACKSPACE:
+                    self.obstacles = []
+                    self.grid = Grid([])
                 elif event.key == pygame.K_SPACE:
                     # Inform user that it is finding path...
                     pygame.display.set_caption("Calculating path...")
