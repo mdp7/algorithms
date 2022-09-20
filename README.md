@@ -26,3 +26,9 @@ A list of commands will be converted to a string. Each command is separated by '
 ### Example
 If moves to travel a path to take a picture is [FF, RF, FF, FF, LB], it will be converted to "1,1/2,1/1,2/3,1/*/!" 
 
+## Running simulator
+If you want to run the simulator, go to `python/algorithm/main.py` and run `main.py`.
+- Use arrow keys to set obstacle direction, then click on grid
+- Backspace to clear all obstacle on field
+- Space to start running
+- Running the simulator with space will print the commands that would be fed to stm
