@@ -75,16 +75,16 @@ class Obstacle:
         The object will also store the angle that the robot should face.
         """
         if self.pos.direction == Direction.TOP:
-            return RobotPosition(self.pos.x, self.pos.y + const.OBSTACLE_SAFETY_WIDTH + const.OBSTACLE_LENGTH,
+            return RobotPosition(self.pos.x, self.pos.y + const.OBSTACLE_SAFETY_WIDTH + const.OBSTACLE_LENGTH + const.OBSTACLE_TARGET_OFFSET,
                                  Direction.BOTTOM)
         elif self.pos.direction == Direction.BOTTOM:
-            return RobotPosition(self.pos.x, self.pos.y - const.OBSTACLE_SAFETY_WIDTH - const.OBSTACLE_LENGTH,
+            return RobotPosition(self.pos.x, self.pos.y - const.OBSTACLE_SAFETY_WIDTH - const.OBSTACLE_LENGTH - const.OBSTACLE_TARGET_OFFSET,
                                  Direction.TOP)
         elif self.pos.direction == Direction.LEFT:
-            return RobotPosition(self.pos.x - const.OBSTACLE_SAFETY_WIDTH - const.OBSTACLE_LENGTH, self.pos.y,
+            return RobotPosition(self.pos.x - const.OBSTACLE_SAFETY_WIDTH - const.OBSTACLE_LENGTH - const.OBSTACLE_TARGET_OFFSET, self.pos.y,
                                  Direction.RIGHT)
         else:
-            return RobotPosition(self.pos.x + const.OBSTACLE_SAFETY_WIDTH + const.OBSTACLE_LENGTH, self.pos.y,
+            return RobotPosition(self.pos.x + const.OBSTACLE_SAFETY_WIDTH + const.OBSTACLE_LENGTH + const.OBSTACLE_TARGET_OFFSET, self.pos.y,
                                  Direction.LEFT)
     
     def draw_self(self, screen):
