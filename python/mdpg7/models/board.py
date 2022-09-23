@@ -1,5 +1,5 @@
 """
-Helper data structure for hybrid astar
+Helper data structure for hybrid A*
 """
 from typing import List
 
@@ -19,6 +19,7 @@ class Board:
     
     @classmethod
     def from_arena(cls, arena: Arena) -> 'Board':
+        """Generate board WITHOUT start and goal from Arena object"""
         rows, cols = ArenaConst.NUM_ROWS, ArenaConst.NUM_COLS
         nodes = [[[Node(CellPosition(cell_x, cell_y, facing))
                    for facing in Facing]

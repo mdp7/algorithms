@@ -1,3 +1,6 @@
+"""
+Robot UI
+"""
 import math
 import os
 from typing import Union
@@ -9,6 +12,7 @@ from mdpg7.utils.position_utils import theta_to_facing
 
 
 class RobotView:
+    """Stores robot information in UI"""
     
     def __init__(self, win_x, win_y, theta):
         self.win_x = win_x
@@ -34,6 +38,7 @@ class RobotView:
 
 
 class RobotViewCommand:
+    """This class is called each tick to handle command and update UI"""
     
     def __init__(self, command, robot_view):
         self.robot_view = robot_view
@@ -73,6 +78,7 @@ class RobotViewCommand:
 
 
 def draw_robot(simulator):
+    """Redraw robot on screen"""
     win_x, win_y = simulator.robot_view.win_x, simulator.robot_view.win_y
     image = pygame.transform.rotate(simulator.robot_view.image, simulator.robot_view.theta)
     image_rect = image.get_rect()

@@ -1,3 +1,6 @@
+"""
+Entrance of Simulator
+"""
 import argparse
 
 from mdpg7.simulator.app import Simulator

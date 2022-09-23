@@ -1,3 +1,8 @@
+"""
+Pygame Simulator App
+Note that this Simulator is not designed to be user-friendly, but to be fully functional
+Check simulator guide in project markdown
+"""
 import sys
 
 import pygame
@@ -23,6 +28,7 @@ from mdpg7.utils.position_utils import cell_x_to_win_x, cell_y_to_win_y
 class Simulator:
     
     def __init__(self):
+        """Initialize variables of simulator"""
         print('Initializing simulator')
         
         # UI attributes
@@ -30,15 +36,16 @@ class Simulator:
         self.surface = None
         self.clock = None
         self.mode = SimulatorConst.MODE_NULL
+        self.robot_view = None
         
         # algorithm attributes
         self.arena = None
         self.robot = None
         self.command = None
         self.commands = None
-        self.robot_view = None
     
     def init_display(self):
+        """Initialize pygame and instance variables"""
         print('Initializing pygame')
         
         # UI
@@ -56,6 +63,7 @@ class Simulator:
             RobotView(cell_x_to_win_x(RobotConst.START_X), cell_y_to_win_y(RobotConst.START_Y), RobotConst.START_THETA)
     
     def init_map(self, map_index):
+        """Either load a default map or wait for user input"""
         print('Loading map to pygame')
         print(f'User choice is {map_index}')
         if map_index == -1:
@@ -69,6 +77,7 @@ class Simulator:
             self.mode = SimulatorConst.MODE_DISPLAY_DEFAULT_MAP
     
     def handle_events(self):
+        """Handle pygame events"""
         if not self.running or self.mode == SimulatorConst.MODE_NULL:
             # this line shouldn't be reached
             print_error('ERROR: handling events while pygame is not running')
@@ -100,6 +109,7 @@ class Simulator:
             sys.exit(1)
     
     def draw(self):
+        """Update UI"""
         if not self.running or self.mode == SimulatorConst.MODE_NULL:
             # this line shouldn't be reached
             print_error('ERROR: drawing while pygame is not running')
@@ -128,6 +138,7 @@ class Simulator:
         pygame.display.flip()
     
     def tick(self):
+        """Called on timer fired and set fixed fps"""
         if not self.running or self.mode == SimulatorConst.MODE_NULL or self.clock is None:
             # this line shouldn't be reached
             print_error('ERROR: clock ticking while pygame is not running')

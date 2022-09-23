@@ -2,6 +2,7 @@ from mdpg7.config.constants import Moves
 
 
 class Command:
+    """Each command should be understood as perform MOVE for REPEAT times"""
     
     def __init__(self, move: Moves):
         self.move = move

@@ -1,3 +1,6 @@
+"""
+Position of any 10x10 square on board
+"""
 from mdpg7.utils.position_utils import *
 
 

@@ -1,7 +1,7 @@
 """
 Conversion among pos, win_pos, cell_pos
 pos is a float representing the position of a point on the actual arena with origin at bottom-left
-win_pos is a float representing the position of a point on the simulator with origin at top-left
+win_pos is a float representing the position of a point on the simulator with origin at top-left for visualization only
 cell_pos is an int representing the position of a cell on the arena board with origin at bottom-left
 """
 from typing import Tuple
@@ -73,14 +73,17 @@ def win_pos_to_cell_pos(win_pos: Tuple[float, float]) -> Tuple[int, int]:
 
 
 def cell_x_to_win_x(cell_x: int) -> float:
+    """returns the center of the cell"""
     return x_to_win_x(cell_x_to_x(cell_x))
 
 
 def cell_y_to_win_y(cell_y: int) -> float:
+    """returns the center of the cell"""
     return y_to_win_y(cell_y_to_y(cell_y))
 
 
 def cell_pos_to_win_pos(cell_pos: Tuple[int, int]) -> Tuple[float, float]:
+    """returns the center of the cell"""
     return cell_x_to_win_x(cell_pos[0]), cell_y_to_win_y(cell_pos[1])
 
 
