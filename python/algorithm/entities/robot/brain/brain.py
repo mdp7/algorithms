@@ -73,10 +73,13 @@ class Brain:
             else:
                 new_commands.append(command)
                 index += 1
-                total_distance += (const.ROBOT_TURN_RADIUS)//const.SCALING_FACTOR * math.pi/2
+                if isinstance(command, TurnCommand):
+                    total_distance += (const.ROBOT_TURN_RADIUS)//const.SCALING_FACTOR * math.pi/2
 
-        print("\n", new_commands)
-        print(f"Instruction String: {instruction_str}")
+        # print("\n", new_commands)
+        for c in new_commands:
+            print(c, end=",")
+        # print(f"Instruction String: {instruction_str}")
         self.commands = new_commands
         print(f"Done! Distance Travelled: {total_distance}cm  Time taken: {total_distance/(10/3)}s")
 
