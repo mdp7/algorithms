@@ -1,3 +1,6 @@
+"""
+Node class storing 3d position for A* algorithm
+"""
 from typing import Union
 
 from mdpg7.models.cell_position import CellPosition

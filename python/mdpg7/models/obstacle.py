@@ -9,6 +9,7 @@ class Obstacle:
         self.image = image
     
     def get_target_position(self) -> CellPosition:
+        """Gets robot stopping position according to obstacle position and facing"""
         target_cell_x, target_cell_y, target_facing = self.cell_pos.cell_x, self.cell_pos.cell_y, self.cell_pos.facing
         if self.cell_pos.facing == Facing.R:
             target_cell_x += ArenaConst.DETECT_CELL_DISTANCE

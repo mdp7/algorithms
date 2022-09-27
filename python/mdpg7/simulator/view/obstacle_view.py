@@ -1,3 +1,6 @@
+"""
+Obstacle UI
+"""
 import os
 import sys
 

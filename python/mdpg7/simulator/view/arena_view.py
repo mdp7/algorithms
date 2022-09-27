@@ -1,3 +1,6 @@
+"""
+Arena UI
+"""
 import pygame
 
 from mdpg7.config.constants import ArenaConst, SimulatorConst

@@ -1,3 +1,6 @@
+"""
+Collection of obstacles
+"""
 from typing import List, Union, Any
 
 from mdpg7.config.constants import ArenaConst
