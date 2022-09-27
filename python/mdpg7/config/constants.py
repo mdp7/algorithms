@@ -42,6 +42,9 @@ class RobotConst:
     START_THETA = 90
     WIDTH = 25
     HEIGHT = 20
+
+    # in cm
+    STRAIGHT_MOVE_DIST = 10
     
     MOVES_PENALTY = [
         3.5,  # LF

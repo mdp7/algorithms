@@ -35,13 +35,12 @@ def compress_instructions(instruction_list: list):
 def commands_to_message(commands: list):
     index = 0
     to_return = ""
-    while (index < len(commands)):
-        to_return = to_return + f"{commands[index].move},{commands[index].repeat}/" if commands[
-                                                                                           index] != TAKE_PICTURE else to_return + f"{TAKE_PICTURE}/"
+    while index < len(commands):
+        to_return += f"{commands[index]}/"
         index += 1
     
-    to_return += '!'
-    print("Message: ", to_return)
+    # to_return += '!'
+    # print("Message: ", to_return)
     
     return to_return
 
