@@ -40,10 +40,13 @@ class Brain:
                 targets.append(obstacle.target_pos)
             dist = 0
             for i in range(len(targets) - 1):
-                if abs(targets[i].angle - targets[i + 1].angle) == 180:
-                    mul = 2
-                else:
+                delta = abs(targets[i].angle - targets[i + 1].angle)
+                if delta == 180:
+                    mul = 4
+                elif delta == 0:
                     mul = 1
+                else:
+                    mul = 2
                 dist += mul * math.sqrt(((targets[i].xy_pygame()[0] - targets[i + 1].xy_pygame()[0]) ** 2) +
                                   ((targets[i].xy_pygame()[1] - targets[i + 1].xy_pygame()[1]) ** 2))
             return dist
