@@ -19,7 +19,7 @@ def compute_simple_hamiltonian_path(arena: Arena, robot: Robot):
     permutations = tuple(itertools.permutations(arena.obstacles))
     
     def path_distance(path):
-        nodes = [robot.cell_pos.cell_pos2d()] + [obstacle.cell_pos.cell_pos2d() for obstacle in path]
+        nodes = [robot.cell_pos.cell_pos2d()] + [obstacle.get_target_position().cell_pos2d() for obstacle in path]
         dist = 0
         for i in range(len(nodes) - 1):
             dist += dist_pos(nodes[i], nodes[i + 1])

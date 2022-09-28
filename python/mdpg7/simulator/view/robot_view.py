@@ -64,7 +64,7 @@ class RobotViewCommand:
         self.fy = lambda t: fdy(radius, step, t) + by
         self.ft = lambda t: RobotConst.MOVES_SIGN_T[command.move] * step_t * t + bt
         
-        print(command)
+        # print(command)
     
     def forward(self) -> Union['RobotViewCommand', None]:
         self.tick += 1
