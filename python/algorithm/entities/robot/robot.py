@@ -13,23 +13,26 @@ from algorithm.entities.robot.brain.brain import Brain
 
 
 class Robot:
-    def __init__(self, grid):
+    def __init__(self, robot_x, robot_y, robot_dir: Direction, grid):
         # Note that we assume the robot starts always facing the top.
-        # This value will never change, but it will not affect us as the robot uses a more fine-tuned internal
-        # angle tracker.
         self.pos = RobotPosition(
-                                 const.ROBOT_SAFETY_DISTANCE,
-                                 const.ROBOT_SAFETY_DISTANCE,
+                                 # const.ROBOT_SAFETY_DISTANCE,
+                                 # const.ROBOT_SAFETY_DISTANCE,
                                  # const.ROBOT_CUSTOM_START_X,
                                  # const.ROBOT_CUSTOM_START_Y,
-                                 Direction.TOP,
-                                 90)
+                                 # Direction.TOP,
+                                 robot_x * const.SCALING_FACTOR,
+                                 robot_y * const.SCALING_FACTOR,
+                                 robot_dir,
+                                 robot_dir)
+        # This value will never change, but it will not affect us as the robot uses a more fine-tuned internal
+        # angle tracker.
         self._start_copy = self.pos.copy()
         
         self.brain = Brain(self, grid)
         
-        self.__image = pygame.transform.scale(pygame.image.load("entities/assets/robot.png"),
-                                              (const.ROBOT_LENGTH // 2, const.ROBOT_LENGTH // 2))
+        # self.__image = pygame.transform.scale(pygame.image.load("entities/assets/robot.png"),
+        #                                       (const.ROBOT_LENGTH // 2, const.ROBOT_LENGTH // 2))
         
         self.path_hist = []  # Stores the history of the path taken by the robot.
         
@@ -44,9 +47,13 @@ class Robot:
         Convert the list of command objects to corresponding list of messages.
         """
         print("Converting commands to string...", end="")
-        string_commands = [command.convert_to_message() for command in self.brain.commands]
+        # string_commands = [command.convert_to_message() for command in self.brain.commands]
+
+        result_str = ""
+        for c in self.brain.commands:
+            result_str += f"{c}/"
         print("Done!")
-        return string_commands
+        return result_str
     
     def turn(self, d_angle, rev):
         """
