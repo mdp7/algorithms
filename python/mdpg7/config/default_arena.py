@@ -12,15 +12,15 @@ obstacle_setup =[[Obstacle(CellPosition(1, 18, Facing.D), ObstacleImage.S),
                   Obstacle(CellPosition(15, 16, Facing.L), ObstacleImage.C),
                   Obstacle(CellPosition(19, 9, Facing.L), ObstacleImage.D)],
 
-                 [Obstacle(CellPosition(4, 10, Facing.L), ObstacleImage.S),
-                  # Obstacle(CellPosition(4, 13, Facing.D), ObstacleImage.EIGHT),
+                 [Obstacle(CellPosition(1, 10, Facing.U), ObstacleImage.S),
+                  Obstacle(CellPosition(4, 13, Facing.D), ObstacleImage.EIGHT),
                   Obstacle(CellPosition(7, 10, Facing.R), ObstacleImage.SIX),
                   Obstacle(CellPosition(13, 12, Facing.L), ObstacleImage.B),]
                  ]
 
 arena0 = Arena()
 ARENAS.append(arena0)
-i = 0
+i = 1
 for obs in obstacle_setup[i]:
     arena0.add_obstacle(obs)
 # arena0.add_obstacle(Obstacle(CellPosition(1, 18, Facing.D), ObstacleImage.S))

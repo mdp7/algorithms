@@ -19,12 +19,22 @@ def compute_simple_hamiltonian_path(arena: Arena, robot: Robot):
     permutations = tuple(itertools.permutations(arena.obstacles))
     
     def path_distance(path):
-        nodes = [robot.cell_pos.cell_pos2d()] + [obstacle.get_target_position().cell_pos2d() for obstacle in path]
+
+        nodes = [robot.cell_pos] + [obstacle.get_target_position() for obstacle in path]
         dist = 0
         for i in range(len(nodes) - 1):
-            dist += dist_pos(nodes[i], nodes[i + 1])
+            '''
+            Add multiplier based on the next node of travel direction.
+            Most detrimental if it's the reverse direction
+            Least detrimental if it's equal direction
+            '''
+            if abs(nodes[i].facing - nodes[i+1].facing) == 2:
+                mul = 2
+            else:
+                mul = 1
+            dist += (dist_pos(nodes[i].cell_pos2d(), nodes[i + 1].cell_pos2d()) * mul)
         return dist
-    
+
     return min(permutations, key=path_distance)
 
 
