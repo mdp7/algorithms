@@ -17,10 +17,11 @@ class Robot:
         # Note that we assume the robot starts always facing the top.
         # This value will never change, but it will not affect us as the robot uses a more fine-tuned internal
         # angle tracker.
-        self.pos = RobotPosition(#const.ROBOT_SAFETY_DISTANCE,
-                                 #const.ROBOT_SAFETY_DISTANCE,
-                                 const.ROBOT_CUSTOM_START_X,
-                                 const.ROBOT_CUSTOM_START_Y,
+        self.pos = RobotPosition(
+                                 const.ROBOT_SAFETY_DISTANCE,
+                                 const.ROBOT_SAFETY_DISTANCE,
+                                 # const.ROBOT_CUSTOM_START_X,
+                                 # const.ROBOT_CUSTOM_START_Y,
                                  Direction.TOP,
                                  90)
         self._start_copy = self.pos.copy()

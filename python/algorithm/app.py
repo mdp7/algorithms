@@ -103,6 +103,20 @@ class AlgoSimulator(AlgoApp):
                         o.append(i)
                     obs = self.parse_obstacle_data()
                     self.grid = Grid(obs)
+                elif event.key == pygame.K_1:
+                    self.obstacles = [[15, 145, -90], [145, 105, 180]]
+                    self.index += len(self.obstacles)
+                    for i, o in enumerate(self.obstacles):
+                        o.append(i)
+                    obs = self.parse_obstacle_data()
+                    self.grid = Grid(obs)
+                elif event.key == pygame.K_2:
+                    self.obstacles = [[15, 95, 90], [45, 125, -90], [75, 95, 0], [135, 115, 180]]
+                    self.index += len(self.obstacles)
+                    for i, o in enumerate(self.obstacles):
+                        o.append(i)
+                    obs = self.parse_obstacle_data()
+                    self.grid = Grid(obs)
                 elif event.key == pygame.K_DOWN:
                     self.direction = Direction.BOTTOM
                     print(self.direction)
