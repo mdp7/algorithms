@@ -85,30 +85,9 @@ class AlgoSimulator(AlgoApp):
                 self.grid = Grid(obs)
 
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a:
-                    self.obstacles = [[25, 185, -90], [125, 185, -90], [105, 25, 180], [15, 115, -90], [125, 85, 180]]
-                    self.index += len(self.obstacles)
-                    for i, o in enumerate(self.obstacles):
-                        o.append(i)
-                    obs = self.parse_obstacle_data()
-                    self.grid = Grid(obs)
 
-                elif event.key == pygame.K_b:
-                    self.obstacles = [[25, 185, -90], [125, 185, -90], [105, 25, 0], [15, 115, -90], [125, 85, 180]]
-                    self.index += len(self.obstacles)
-                    for i, o in enumerate(self.obstacles):
-                        o.append(i)
-                    obs = self.parse_obstacle_data()
-                    self.grid = Grid(obs)
-                elif event.key == pygame.K_1:
-                    self.obstacles = [[15, 145, -90], [145, 105, 180]]
-                    self.index += len(self.obstacles)
-                    for i, o in enumerate(self.obstacles):
-                        o.append(i)
-                    obs = self.parse_obstacle_data()
-                    self.grid = Grid(obs)
-                elif event.key == pygame.K_2:
-                    self.obstacles = [[15, 95, 90], [45, 125, -90], [75, 95, 0], [135, 115, 180]]
+                if 48 <= event.key <= 57:
+                    self.obstacles = const.OBSTACLE_LAYOUT[int(event.key)-48]
                     self.index += len(self.obstacles)
                     for i, o in enumerate(self.obstacles):
                         o.append(i)

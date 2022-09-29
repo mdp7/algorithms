@@ -48,7 +48,7 @@ class Brain:
                 else:
                     mul = 2
                 dist += mul * math.sqrt(((targets[i].xy_pygame()[0] - targets[i + 1].xy_pygame()[0]) ** 2) +
-                                  ((targets[i].xy_pygame()[1] - targets[i + 1].xy_pygame()[1]) ** 2))
+                                        ((targets[i].xy_pygame()[1] - targets[i + 1].xy_pygame()[1]) ** 2))
             return dist
 
         simple = min(perms, key=calc_distance)
@@ -63,40 +63,48 @@ class Brain:
 
         Helps to reduce the number of commands.
         """
-        print("Compressing commands... ", end="")
+        print("Compressing commands... ")
         total_distance = 0
+        time = 0
         index = 0
         instruction_str = ""
         new_commands = deque()
         while index < len(self.commands):
             command = self.commands[index]
+            time += command.time * 5
             if isinstance(command, StraightCommand):
+                # print("Straight Command ticks: ", command.time)
                 new_length = 0
                 while index < len(self.commands) and isinstance(self.commands[index], StraightCommand):
                     new_length += self.commands[index].dist
                     index += 1
                     total_distance += 10
+                    time += command.time
                 command = StraightCommand(new_length)
                 new_commands.append(command)
             else:
                 new_commands.append(command)
                 index += 1
                 if isinstance(command, TurnCommand):
-                    total_distance += (const.ROBOT_TURN_RADIUS)//const.SCALING_FACTOR * math.pi/2
+                    # print("Turn Command ticks: ", command.total_ticks)
+                    # print((const.ROBOT_TURN_RADIUS)//const.SCALING_FACTOR * math.pi/2)
+                    total_distance += (const.ROBOT_TURN_RADIUS) // const.SCALING_FACTOR * math.pi / 2
 
         # print("\n", new_commands)
         for c in new_commands:
             print(c, end=",")
-        # print(f"Instruction String: {instruction_str}")
+
+        print()
+        # print(new_commands)
         self.commands = new_commands
-        print(f"Done! Distance Travelled: {total_distance}cm  Time taken: {total_distance/(10/3)}s")
+        print(f"Done! Distance Travelled: {total_distance}cm  Time taken: {time}s")
 
     def plan_path(self):
         print("-" * 40)
         print("STARTING PATH COMPUTATION...")
         self.simple_hamiltonian = self.compute_simple_hamiltonian_path()
         print()
-        
+
         curr = self.robot.pos.copy()  # We use a copy rather than get a reference.
         for obstacle in self.simple_hamiltonian:
             target = obstacle.get_robot_target_pos()
@@ -108,6 +116,71 @@ class Brain:
                 print("\tPath found.")
                 curr = res
                 self.commands.append(ScanCommand(const.ROBOT_SCAN_TIME, obstacle.index))
-        
         self.compress_paths()
         print("-" * 40)
+
+    #     PENALTY TESTING
+
+    def compress_paths_test(self):
+        """
+        Compress similar commands into one command.
+
+        Helps to reduce the number of commands.
+        """
+        print("Compressing commands... ")
+        total_distance = 0
+        time = 0
+        index = 0
+        instruction_str = ""
+        new_commands = deque()
+        while index < len(self.commands):
+            command = self.commands[index]
+            time += command.time * 5
+            if isinstance(command, StraightCommand):
+                # print("Straight Command ticks: ", command.time)
+                new_length = 0
+                while index < len(self.commands) and isinstance(self.commands[index], StraightCommand):
+                    new_length += self.commands[index].dist
+                    index += 1
+                    total_distance += 10
+                    time += command.time
+                command = StraightCommand(new_length)
+                new_commands.append(command)
+            else:
+                new_commands.append(command)
+                index += 1
+                if isinstance(command, TurnCommand):
+                    # print("Turn Command ticks: ", command.total_ticks)
+                    # print((const.ROBOT_TURN_RADIUS)//const.SCALING_FACTOR * math.pi/2)
+                    total_distance += (const.ROBOT_TURN_RADIUS) // const.SCALING_FACTOR * math.pi / 2
+
+        # print("\n", new_commands)
+        # for c in new_commands:
+        #     print(c, end="/")
+
+        print()
+        # print(new_commands)
+        self.commands = new_commands
+        return time, total_distance
+
+    def plan_path_test(self, penalties: list):
+        print("-" * 40)
+        print("STARTING PATH COMPUTATION...")
+        self.simple_hamiltonian = self.compute_simple_hamiltonian_path()
+        print()
+
+        curr = self.robot.pos.copy()  # We use a copy rather than get a reference.
+        for obstacle in self.simple_hamiltonian:
+            target = obstacle.get_robot_target_pos()
+            print(f"Planning {curr} to {target}")
+            res = ModifiedAStar(self.grid, self, curr, target).start_astar()
+            if res is None:
+                print(f"\tNo path found from {curr} to {obstacle}")
+            else:
+                print("\tPath found.")
+                curr = res
+                self.commands.append(ScanCommand(const.ROBOT_SCAN_TIME, obstacle.index))
+
+#       Return me path time, distance and penalties used
+        return self.compress_paths_test()
+
