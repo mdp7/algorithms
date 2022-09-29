@@ -43,18 +43,18 @@ class ModifiedAStar:
             StraightCommand(-straight_dist)
         ]
 
-        backwards_move_mul = 2
+        backwards_move_mul = 2.6
         forward_move_mul = 1
 
-        backwards_turn_mul = 5
-        forward_turn_mul = 2
+        backwards_turn_mul = 10000
+        forward_turn_mul = 1000
 
         for c in straight_commands:
             # Check if doing this command does not bring us to any invalid position.
             after, p = self.check_valid_command(c, pos)
             if after:
-                penalty = penalty * backwards_move_mul if c.dist < 0 else (penalty * forward_move_mul)
-                neighbours.append((after, p, penalty, c))
+                penalty_adjusted = penalty * backwards_move_mul if c.dist < 0 else (penalty * forward_move_mul)
+                neighbours.append((after, p, penalty_adjusted, c))
         
         # Check turns
         # turn_penalty = const.PATH_TURN_COST
@@ -69,8 +69,8 @@ class ModifiedAStar:
             # Check if doing this command does not bring us to any invalid position.
             after, p = self.check_valid_command(c, pos)
             if after:
-                turn_penalty = turn_penalty * backwards_turn_mul if c.rev else turn_penalty * forward_turn_mul
-                neighbours.append((after, p, turn_penalty, c))
+                turn_penalty_adjusted = turn_penalty * backwards_turn_mul if c.rev else turn_penalty * forward_turn_mul
+                neighbours.append((after, p, turn_penalty_adjusted, c))
         return neighbours
     
     def check_valid_command(self, command: Command, p: RobotPosition):
@@ -161,56 +161,52 @@ class ModifiedAStar:
         commands.reverse()
         self.brain.commands.extend(commands)
 
+    """
+    Penalty Testing
+    """
+    def start_astar_test(self, penalties: list):
+        frontier = PriorityQueue()  # Store frontier nodes to travel to.
+        backtrack = dict()  # Store the sequence of nodes being travelled.
+        cost = dict()  # Store the cost to travel from start to a node.
 
+        # We can check what the goal node is
+        goal_node = self.grid.get_coordinate_node(*self.end.xy()).copy()  # Take note of copy!
+        goal_node.pos.direction = self.end.direction  # Set the required direction at this node.
 
-"""
-Penalty Testing
-"""
+        # Add starting node set into the frontier.
+        start_node: Node = self.grid.get_coordinate_node(*self.start.xy()).copy()  # Take note of copy!
+        start_node.direction = self.start.direction  # Make the node know which direction the robot is facing.
 
+        offset = 0  # Used to tie-break.
+        frontier.put((0, offset, (start_node, self.start)))  # Extra time parameter to tie-break same priority.
+        cost[start_node] = 0
+        # Having None as the parent means this key is the starting node.
+        backtrack[start_node] = (None, None)  # Parent, Command
 
-def start_astar_test(self, penalties: list):
-    frontier = PriorityQueue()  # Store frontier nodes to travel to.
-    backtrack = dict()  # Store the sequence of nodes being travelled.
-    cost = dict()  # Store the cost to travel from start to a node.
+        while not frontier.empty():  # While there are still nodes to process.
+            # Get the highest priority node.
+            priority, _, (current_node, current_position) = frontier.get()
+            # If the current node is our goal.
+            if current_node == goal_node:
+                # Get the commands needed to get to destination.
+                self.extract_commands(backtrack, goal_node)
+                return current_position
 
-    # We can check what the goal node is
-    goal_node = self.grid.get_coordinate_node(*self.end.xy()).copy()  # Take note of copy!
-    goal_node.pos.direction = self.end.direction  # Set the required direction at this node.
+            # Otherwise, we check through all possible locations that we can
+            # travel to from this node.
+            for new_node, new_pos, weight, c in self.get_neighbours_test(current_position, penalties):
+                new_cost = cost.get(current_node) + weight
 
-    # Add starting node set into the frontier.
-    start_node: Node = self.grid.get_coordinate_node(*self.start.xy()).copy()  # Take note of copy!
-    start_node.direction = self.start.direction  # Make the node know which direction the robot is facing.
+                if new_node not in backtrack or new_cost < cost[new_node]:
+                    offset += 1
+                    priority = new_cost + self.heuristic(new_pos)
 
-    offset = 0  # Used to tie-break.
-    frontier.put((0, offset, (start_node, self.start)))  # Extra time parameter to tie-break same priority.
-    cost[start_node] = 0
-    # Having None as the parent means this key is the starting node.
-    backtrack[start_node] = (None, None)  # Parent, Command
-
-    while not frontier.empty():  # While there are still nodes to process.
-        # Get the highest priority node.
-        priority, _, (current_node, current_position) = frontier.get()
-        # If the current node is our goal.
-        if current_node == goal_node:
-            # Get the commands needed to get to destination.
-            self.extract_commands(backtrack, goal_node)
-            return current_position
-
-        # Otherwise, we check through all possible locations that we can
-        # travel to from this node.
-        for new_node, new_pos, weight, c in self.get_neighbours_test(current_position, penalties):
-            new_cost = cost.get(current_node) + weight
-
-            if new_node not in backtrack or new_cost < cost[new_node]:
-                offset += 1
-                priority = new_cost + self.heuristic(new_pos)
-
-                frontier.put((priority, offset, (new_node, new_pos)))
-                backtrack[new_node] = (current_node, c)
-                cost[new_node] = new_cost
-    # If we are here, means that there was no path that we could find.
-    # We return None to show that we cannot find a path.
-    return None
+                    frontier.put((priority, offset, (new_node, new_pos)))
+                    backtrack[new_node] = (current_node, c)
+                    cost[new_node] = new_cost
+        # If we are here, means that there was no path that we could find.
+        # We return None to show that we cannot find a path.
+        return None
 
     def get_neighbours_test(self, pos: RobotPosition, penalties: list) -> List[Tuple[Node, RobotPosition, int, Command]]:
         """
@@ -237,13 +233,13 @@ def start_astar_test(self, penalties: list):
 
         backwards_turn_mul = penalties[1]
         forward_turn_mul = penalties[2]
-
+        # print(backwards_turn_mul, forward_turn_mul)
         for c in straight_commands:
             # Check if doing this command does not bring us to any invalid position.
             after, p = self.check_valid_command(c, pos)
             if after:
-                penalty = penalty * backwards_move_mul if c.dist < 0 else (penalty * forward_move_mul)
-                neighbours.append((after, p, penalty, c))
+                adjusted_penalty = penalty * backwards_move_mul if c.dist < 0 else (penalty * forward_move_mul)
+                neighbours.append((after, p, adjusted_penalty, c))
 
         # Check turns
         # turn_penalty = const.PATH_TURN_COST
@@ -254,10 +250,11 @@ def start_astar_test(self, penalties: list):
             TurnCommand(90, True),  # Reverse with wheels to right.
             TurnCommand(-90, True),  # Reverse with wheels to left.
         ]
+
         for c in turn_commands:
             # Check if doing this command does not bring us to any invalid position.
             after, p = self.check_valid_command(c, pos)
             if after:
-                turn_penalty = turn_penalty * backwards_turn_mul if c.rev else turn_penalty * forward_turn_mul
-                neighbours.append((after, p, turn_penalty, c))
+                adjusted_turn_penalty = turn_penalty * backwards_turn_mul if c.rev else turn_penalty * forward_turn_mul
+                neighbours.append((after, p, adjusted_turn_penalty, c))
         return neighbours

@@ -52,9 +52,9 @@ class Brain:
             return dist
 
         simple = min(perms, key=calc_distance)
-        print("Found a simple hamiltonian path:")
-        for ob in simple:
-            print(f"\t{ob}")
+        # print("Found a simple hamiltonian path:")
+        # for ob in simple:
+        #     print(f"\t{ob}")
         return simple
 
     def compress_paths(self):
@@ -127,7 +127,7 @@ class Brain:
 
         Helps to reduce the number of commands.
         """
-        print("Compressing commands... ")
+        # print("Compressing commands... ")
         total_distance = 0
         time = 0
         index = 0
@@ -161,23 +161,23 @@ class Brain:
         print()
         # print(new_commands)
         self.commands = new_commands
-        return time, total_distance
+        return time, total_distance, new_commands
 
     def plan_path_test(self, penalties: list):
-        print("-" * 40)
-        print("STARTING PATH COMPUTATION...")
-        self.simple_hamiltonian = self.compute_simple_hamiltonian_path()
-        print()
+        # print("-" * 40)
+        # print("STARTING PATH COMPUTATION...")
+        # self.simple_hamiltonian = self.compute_simple_hamiltonian_path()
+        # print()
 
         curr = self.robot.pos.copy()  # We use a copy rather than get a reference.
         for obstacle in self.simple_hamiltonian:
             target = obstacle.get_robot_target_pos()
-            print(f"Planning {curr} to {target}")
-            res = ModifiedAStar(self.grid, self, curr, target).start_astar()
+            # print(f"Planning {curr} to {target}")
+            res = ModifiedAStar(self.grid, self, curr, target).start_astar_test(penalties)
             if res is None:
                 print(f"\tNo path found from {curr} to {obstacle}")
             else:
-                print("\tPath found.")
+                # print("\tPath found.")
                 curr = res
                 self.commands.append(ScanCommand(const.ROBOT_SCAN_TIME, obstacle.index))
 

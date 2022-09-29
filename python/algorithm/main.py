@@ -30,26 +30,48 @@ def run_penalty_tester():
     Pass to function to iteration through x times
     return the one with min time/distance
     """
-    backwards_penalty = []
-    BT_penalty = []
-    FT_penalty = []
+    backwards_penalty = [1+i*0.2 for i in range(5, 10)]
+    BT_penalty = [i for i in range(4, 6)]
+    FT_penalty = [1+i*0.2 for i in range(0, 5)]
     penalties = []
-
     # Get all permutation of penalties
+    for i in range(len(backwards_penalty)):
+        for j in range(len(BT_penalty)):
+            for k in range(len(FT_penalty)):
+                penalties.append([backwards_penalty[i], BT_penalty[j], FT_penalty[k]])
+    print(f"Length Penalties: {len(penalties)}")
 
     # Get obstacle list
-    obstacles = OBSTACLE_LAYOUT[3]
-    for i, o in obstacles:
+    obstacles = OBSTACLE_LAYOUT[2]
+    for i, o in enumerate(obstacles):
         o.append(i)
 
     # Create grid
     grid = Grid(parse_obstacle_data(obstacles))
-
-    # Create robot
     robot = Robot(15, 15, Direction(90), grid)
+    h_path = robot.brain.compute_simple_hamiltonian_path()
+    results = []
+    for index, p in enumerate(penalties):
+        robot = Robot(15, 15, Direction(90), grid)
+        robot.brain.simple_hamiltonian = h_path
+        print(f"Testing penalty {index}: {p}")
+        results.append([p])
+        # Create robot
 
-    robot.brain.plan_path_test(penalties)
+        results[index].append(robot.brain.plan_path_test(p))
 
+    for i, r in enumerate(results):
+        print(f"Result {i}: {r[0]} {r[1][:2]}")
+        # print(f"Commands:\n{r[1][2]}")
+        print()
+    def get_best_pen(r):
+        return r[1][0]
+
+    best = min(results, key=get_best_pen)
+    print(best)
+    print(f"Best Penalty: {best[0]}")
+
+    # print(f"All results: {results}")
     # Plan path and return calculated time/distance
     # Return best penalty values
     print()
@@ -130,3 +152,4 @@ def run_rpi():
 
 if __name__ == '__main__':
     run_simulator()
+    # run_penalty_tester()
