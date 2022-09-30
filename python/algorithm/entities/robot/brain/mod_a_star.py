@@ -59,10 +59,10 @@ class ModifiedAStar:
         turn_penalty = const.PATH_TURN_COST
 
         turn_commands = [
-            LeftTurn(90, False),  # Forward right turn
-            RightTurn(-90, False),  # Forward left turn
-            RightTurn(90, True),  # Reverse with wheels to right.
-            LeftTurn(-90, True),  # Reverse with wheels to left.
+            # LeftTurn(90, False),  # Forward right turn
+            # RightTurn(-90, False),  # Forward left turn
+            # RightTurn(90, True),  # Reverse with wheels to right.
+            # LeftTurn(-90, True),  # Reverse with wheels to left.
             TPTCommand(90, False), #3Pt turn Left
             TPTCommand(-90, False) #3Pt turn right
         ]
