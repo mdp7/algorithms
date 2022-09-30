@@ -18,8 +18,9 @@ class StraightCommand(Command):
     def __str__(self):
         # return f"StraightCommand(dist={self.dist / const.SCALING_FACTOR}, {self.total_ticks} ticks)"
         move_string = "FORWARD MOVE" if self.dist >= 0 else "BACKWARD MOVE"
-
-        return f"{move_string} {int(abs(self.dist / const.SCALING_FACTOR))}"
+        tmp_dist = int(abs(self.dist / const.SCALING_FACTOR))
+        tmp_dist_adjusted = int(tmp_dist * 0.9)
+        return f"{move_string} {tmp_dist_adjusted}"
     __repr__ = __str__
     
     def process_one_tick(self, robot):
