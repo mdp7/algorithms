@@ -7,6 +7,7 @@ from algorithm.entities.assets import colors
 from algorithm.entities.assets.direction import Direction
 from algorithm.entities.commands.command import Command
 from algorithm.entities.commands.straight_command import StraightCommand
+from algorithm.entities.commands.tpt_command import TPTCommand
 from algorithm.entities.commands.turn_command import TurnCommand
 from algorithm.entities.grid.position import RobotPosition
 from algorithm.entities.robot.brain.brain import Brain
@@ -75,7 +76,10 @@ class Robot:
         Note that ∆θ is in radians.
         """
         TurnCommand(d_angle, rev).apply_on_pos(self.pos)
-    
+
+    def tptTurn(self, d_angle, rev):
+        TPTCommand(d_angle, rev).apply_on_pos(self.pos)
+
     def straight(self, dist):
         """
         Make a robot go straight.
