@@ -1,5 +1,5 @@
 import math
-
+from abc import ABC, abstractmethod
 from algorithm import const
 from algorithm.entities.assets.direction import Direction
 from algorithm.entities.commands.command import Command
@@ -16,10 +16,10 @@ class TurnCommand(Command):
         time = abs((math.radians(angle) * const.ROBOT_LENGTH) /
                    (const.ROBOT_SPEED_PER_SECOND * const.ROBOT_S_FACTOR))
         super().__init__(time)
-        
+
         self.angle = angle
         self.rev = rev
-    
+
     def __str__(self):
         # return f"TurnCommand({self.angle:.2f}degrees, {self.total_ticks} ticks, rev={self.rev})"
         move_string = "FORWARD TURN" if self.rev == False else "BACKWARD TURN"
@@ -30,15 +30,17 @@ class TurnCommand(Command):
             dir_string = "LEFT" if int(self.angle) == -90 else "RIGHT"
         return f"{move_string} {dir_string}"
     __repr__ = __str__
-    
+
+    @abstractmethod
     def process_one_tick(self, robot):
-        if self.total_ticks == 0:
-            return
-        
-        self.tick()
-        angle = self.angle / self.total_ticks
-        robot.turn(angle, self.rev)
-    
+        # if self.total_ticks == 0:
+        #     return
+        #
+        # self.tick()
+        # angle = self.angle / self.total_ticks
+        # robot.turn(angle, self.rev)
+        pass
+
     def apply_on_pos(self, curr_pos: Position):
         """
         x_new = x + R(sin(∆θ + θ) − sin θ)
@@ -71,12 +73,12 @@ class TurnCommand(Command):
             curr_pos.x -= x_change
             curr_pos.y += y_change
         curr_pos.angle += self.angle
-        
+
         if curr_pos.angle < -180:
             curr_pos.angle += 2 * 180
         elif curr_pos.angle >= 180:
             curr_pos.angle -= 2 * 180
-        
+
         # Update the Position's direction.
         if 45 <= curr_pos.angle <= 3 * 45:
             curr_pos.direction = Direction.TOP
@@ -87,7 +89,7 @@ class TurnCommand(Command):
         else:
             curr_pos.direction = Direction.LEFT
         return self
-    
+
     def convert_to_message(self):
         if self.angle > 0 and not self.rev:
             # This is going forward left.
