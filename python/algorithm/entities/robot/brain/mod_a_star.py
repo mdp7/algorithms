@@ -58,7 +58,8 @@ class ModifiedAStar:
         
         # Check turns
         # turn_penalty = const.PATH_TURN_COST
-        turn_penalty = const.ROBOT_TURN_RADIUS * (pi/2)
+        turn_penalty = 100 * straight_dist
+        # turn_penalty = const.ROBOT_TURN_RADIUS * (pi/2)
         turn_commands = [
             TurnCommand(90, False),  # Forward right turn
             TurnCommand(-90, False),  # Forward left turn

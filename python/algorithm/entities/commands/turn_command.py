@@ -14,7 +14,7 @@ class TurnCommand(Command):
         Note that negative angles will always result in the robot being rotated clockwise.
         """
         time = abs((math.radians(angle) * const.ROBOT_LENGTH) /
-                   (const.ROBOT_SPEED_PER_SECOND * const.ROBOT_S_FACTOR))
+                   (const.ROBOT_SPEED_PER_SECOND * const.ROBOT_S_FACTOR)) * 6
         super().__init__(time)
         
         self.angle = angle

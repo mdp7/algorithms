@@ -44,9 +44,9 @@ class Brain:
                 if delta == 180:
                     mul = 4
                 elif delta == 0:
-                    mul = 1
-                else:
                     mul = 2
+                else:
+                    mul = 3
                 dist += mul * math.sqrt(((targets[i].xy_pygame()[0] - targets[i + 1].xy_pygame()[0]) ** 2) +
                                         ((targets[i].xy_pygame()[1] - targets[i + 1].xy_pygame()[1]) ** 2))
             return dist
