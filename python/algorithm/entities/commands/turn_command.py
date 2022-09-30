@@ -20,15 +20,9 @@ class TurnCommand(Command):
         self.angle = angle
         self.rev = rev
 
+    @abstractmethod
     def __str__(self):
-        # return f"TurnCommand({self.angle:.2f}degrees, {self.total_ticks} ticks, rev={self.rev})"
-        move_string = "FORWARD TURN" if self.rev == False else "BACKWARD TURN"
-
-        if move_string == "FORWARD TURN":
-            dir_string = "RIGHT" if int(self.angle) == -90 else "LEFT"
-        else:
-            dir_string = "LEFT" if int(self.angle) == -90 else "RIGHT"
-        return f"{move_string} {dir_string}"
+        pass
     __repr__ = __str__
 
     @abstractmethod
