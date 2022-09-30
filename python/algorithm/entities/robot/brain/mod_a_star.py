@@ -46,23 +46,18 @@ class ModifiedAStar:
             StraightCommand(-straight_dist)
         ]
 
-        backwards_move_mul = 2.6
-        forward_move_mul = 1
-
-        backwards_turn_mul = 10000
-        forward_turn_mul = 1000
+        backwards_move_mul = 100
 
         for c in straight_commands:
             # Check if doing this command does not bring us to any invalid position.
             after, p = self.check_valid_command(c, pos)
             if after:
-                penalty_adjusted = penalty * backwards_move_mul if c.dist < 0 else (penalty * forward_move_mul)
+                penalty_adjusted = penalty * 5 if c.dist < 0 else penalty
                 neighbours.append((after, p, penalty_adjusted, c))
         
         # Check turns
-        # turn_penalty = const.PATH_TURN_COST
-        turn_penalty = 100 * straight_dist
-        # turn_penalty = const.ROBOT_TURN_RADIUS * (pi/2)
+        turn_penalty = const.PATH_TURN_COST
+
         turn_commands = [
             LeftTurn(90, False),  # Forward right turn
             RightTurn(-90, False),  # Forward left turn
@@ -77,9 +72,9 @@ class ModifiedAStar:
             if after:
                 # Check if TPT Turn
                 if isinstance(c, TPTCommand):
-                    turn_penalty_adjusted = turn_penalty * 10000
+                    turn_penalty_adjusted = turn_penalty * const.TPT_MUL
                 else:
-                    turn_penalty_adjusted = turn_penalty * backwards_turn_mul if c.rev else turn_penalty * forward_turn_mul
+                    turn_penalty_adjusted = turn_penalty * 1.5 if c.rev else turn_penalty
                 neighbours.append((after, p, turn_penalty_adjusted, c))
         return neighbours
     
