@@ -2,6 +2,7 @@ from algorithm.entities.assets.direction import Direction
 from algorithm.entities.grid.grid import Grid
 from algorithm.entities.grid.obstacle import Obstacle
 from algorithm.entities.robot.robot import Robot
+from algorithm.const import SCALING_FACTOR
 
 '''
 Receives list of obstacles and robot location
@@ -13,7 +14,17 @@ Plan path
 def get_instruction_path(input_str: str):
     robot = string_converter(input_str)
     robot.brain.plan_path()
-    return robot.convert_all_commands()
+    obs_order_string = convert_obstacle_order(robot.brain.simple_hamiltonian)
+    return [obs_order_string, robot.convert_all_commands()]
+
+def convert_obstacle_order(obs_order : list):
+    to_return = ''
+    for o in obs_order:
+        x = o.pos.x//SCALING_FACTOR
+        y = o.pos.y//SCALING_FACTOR
+        to_return = to_return + str(x) +',' + str(y) +'/'
+
+    return to_return
 
 
 def string_converter(input_str: str):
