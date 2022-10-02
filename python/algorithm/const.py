@@ -53,7 +53,7 @@ OBSTACLE_TARGET_OFFSET = 5 * SCALING_FACTOR
 
 # Path Finding Attributes
 PATH_TURN_COST = 999 * ROBOT_SPEED_PER_SECOND * ROBOT_TURN_RADIUS
-TPT_MUL = 2
+TPT_MUL = 1.05
 # NOTE: Higher number == Lower Granularity == Faster Checking.
 # Must be an integer more than 0! Number higher than 3 not recommended.
 PATH_TURN_CHECK_GRANULARITY = 1
