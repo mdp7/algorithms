@@ -40,19 +40,19 @@ class ModifiedAStar:
         
         # Check travel straights.
         straight_dist = 10 * const.SCALING_FACTOR
-        penalty = straight_dist
+        penalty = const.PATH_TURN_COST // 2
         straight_commands = [
             StraightCommand(straight_dist),
             StraightCommand(-straight_dist)
         ]
 
-        backwards_move_mul = 100
+        backwards_move_mul = 10
 
         for c in straight_commands:
             # Check if doing this command does not bring us to any invalid position.
             after, p = self.check_valid_command(c, pos)
             if after:
-                penalty_adjusted = penalty * 5 if c.dist < 0 else penalty
+                penalty_adjusted = penalty * backwards_move_mul if c.dist < 0 else 0
                 neighbours.append((after, p, penalty_adjusted, c))
         
         # Check turns
