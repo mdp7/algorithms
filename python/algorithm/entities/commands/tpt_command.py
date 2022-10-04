@@ -106,7 +106,7 @@ class TPTCommand(TurnCommand):
         assert isinstance(curr_pos, RobotPosition), print("Cannot apply turn command on non-robot positions!")
         # x_change = 0
         # y_change = 0
-        if ticks >= 20:
+        if ticks >= 35:
             self.rev = False
             self.rev = False
             x_change = const.ROBOT_TPT_TURN_RADIUS * (math.sin(math.radians(curr_pos.angle + self.angle)) -

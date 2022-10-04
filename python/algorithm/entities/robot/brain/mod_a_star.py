@@ -110,7 +110,7 @@ class ModifiedAStar:
                 tick_command = TPTCommand(command.angle / (command.ticks // const.PATH_TURN_CHECK_GRANULARITY),
                                          command.rev)
                 tick_command.apply_on_pos_check(p_c, command.ticks)
-                if not (self.grid.check_valid_position(p_c) and self.grid.get_coordinate_node(*p_c.xy())):
+                if not (self.grid.check_valid_position_tpt(p_c) ):#and self.grid.get_coordinate_node(*p_c.xy())):
                     return None, None
             command.apply_on_pos(p, command.ticks)
 
