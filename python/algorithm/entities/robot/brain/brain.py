@@ -100,13 +100,13 @@ class Brain:
 
 
         # print("\n", new_commands)
-        for c in new_commands:
-            print(c, end=",")
+        # for c in new_commands:
+        #     print(c, end=",")
 
         print()
         # print(new_commands)
         self.commands = new_commands
-        print(f"Done! Distance Travelled: {total_distance}cm  Time taken: {time}s")
+        # print(f"Done! Distance Travelled: {total_distance}cm  Time taken: {time}s")
 
     def plan_path(self):
         print("-" * 40)
@@ -117,7 +117,7 @@ class Brain:
         curr = self.robot.pos.copy()  # We use a copy rather than get a reference.
         for obstacle in self.simple_hamiltonian:
             target = obstacle.get_robot_target_pos()
-            print(f"Planning {curr} to {target}")
+            # print(f"Planning {curr} to {target}")
             res = ModifiedAStar(self.grid, self, curr, target).start_astar()
             if res is None:
                 print(f"\tNo path found from {curr} to {obstacle}")
