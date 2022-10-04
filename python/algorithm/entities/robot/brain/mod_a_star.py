@@ -63,7 +63,7 @@ class ModifiedAStar:
             # RightTurn(-90, False),  # Forward left turn
             # RightTurn(45, True),  # Reverse with wheels to right.
             # LeftTurn(-90, True),  # Reverse with wheels to left.
-            # TPTCommand(90, False), #3Pt turn Left
+            TPTCommand(90, False), #3Pt turn Left
             TPTCommand(-90, False) #3Pt turn right
         ]
         for c in turn_commands:
@@ -109,7 +109,7 @@ class ModifiedAStar:
             for tick in range(command.ticks // const.PATH_TURN_CHECK_GRANULARITY):
                 tick_command = TPTCommand(command.angle / (command.ticks // const.PATH_TURN_CHECK_GRANULARITY),
                                          command.rev)
-                tick_command.apply_on_pos(p_c, command.ticks)
+                tick_command.apply_on_pos_check(p_c, command.ticks)
                 if not (self.grid.check_valid_position(p_c) and self.grid.get_coordinate_node(*p_c.xy())):
                     return None, None
             command.apply_on_pos(p, command.ticks)
