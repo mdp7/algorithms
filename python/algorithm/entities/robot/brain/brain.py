@@ -99,7 +99,7 @@ class Brain:
                     total_distance += turn_amt
 
 
-        print("\n", new_commands)
+        # print("\n", new_commands)
         for c in new_commands:
             print(c, end=",")
 
