@@ -25,8 +25,8 @@ class Obstacle:
         self.target_pos = self.get_robot_target_pos()
         
         # Arrow to draw at the target coordinate.
-        self.target_image = pygame.transform.scale(pygame.image.load("entities/assets/target-arrow-2.png"),
-                                                   (50, 50))
+        # self.target_image = pygame.transform.scale(pygame.image.load("entities/assets/target-arrow-2.png"),
+        #                                            (50, 50))
         
         self.index = index
     

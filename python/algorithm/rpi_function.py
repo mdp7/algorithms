@@ -38,7 +38,7 @@ def string_converter(input_str: str):
     for index, l in enumerate(locations):
         # x,y,direction_number
         variables = l.split(',')
-        print(variables)
+        # print(variables)
         x = int(variables[0])
         y = int(variables[1])
         dir = Direction(int(variables[2]))
