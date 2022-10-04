@@ -6,7 +6,10 @@ from algorithm import const
 from algorithm.entities.assets import colors
 from algorithm.entities.assets.direction import Direction
 from algorithm.entities.commands.command import Command
+from algorithm.entities.commands.left_command import LeftTurn
+from algorithm.entities.commands.right_command import RightTurn
 from algorithm.entities.commands.straight_command import StraightCommand
+from algorithm.entities.commands.tpt_command import TPTCommand
 from algorithm.entities.commands.turn_command import TurnCommand
 from algorithm.entities.grid.position import RobotPosition
 from algorithm.entities.robot.brain.brain import Brain
@@ -32,7 +35,7 @@ class Robot:
         self.brain = Brain(self, grid)
         
         self.__image = pygame.transform.scale(pygame.image.load("entities/assets/robot.png"),
-                                              (const.ROBOT_LENGTH // 2, const.ROBOT_LENGTH // 2))
+                                              (const.ROBOT_LENGTH*1.5, const.ROBOT_LENGTH // 1.2))
         
         self.path_hist = []  # Stores the history of the path taken by the robot.
         
@@ -75,7 +78,15 @@ class Robot:
         Note that ∆θ is in radians.
         """
         TurnCommand(d_angle, rev).apply_on_pos(self.pos)
-    
+
+    def left_turn(self, d_angle, rev):
+        LeftTurn(d_angle, rev).apply_on_pos(self.pos)
+
+    def right_turn(self, d_angle, rev):
+        RightTurn(d_angle, rev).apply_on_pos(self.pos)
+    def tptTurn(self, d_angle, rev):
+        TPTCommand(d_angle, rev).apply_on_pos(self.pos)
+
     def straight(self, dist):
         """
         Make a robot go straight.

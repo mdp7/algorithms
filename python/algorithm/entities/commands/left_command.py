@@ -1,39 +1,39 @@
 import math
-from abc import ABC, abstractmethod
+
 from algorithm import const
 from algorithm.entities.assets.direction import Direction
 from algorithm.entities.commands.command import Command
+from algorithm.entities.commands.turn_command import TurnCommand
 from algorithm.entities.grid.position import Position, RobotPosition
 
 
-class TurnCommand(Command):
+class LeftTurn(TurnCommand):
     def __init__(self, angle, rev):
         """
         Angle to turn and whether the turn is done in reverse or not. Note that this is in degrees.
 
         Note that negative angles will always result in the robot being rotated clockwise.
         """
-        time = abs((math.radians(angle) * const.ROBOT_LENGTH) /
-                   (const.ROBOT_SPEED_PER_SECOND * const.ROBOT_S_FACTOR))
-        super().__init__(time)
+        super().__init__(angle, rev)
 
         self.angle = angle
         self.rev = rev
 
-    @abstractmethod
     def __str__(self):
-        pass
+        # return f"TurnCommand({self.angle:.2f}degrees, {self.total_ticks} ticks, rev={self.rev})"
+        move_string = "FORWARD TURN" if self.rev == False else "BACKWARD TURN"
+        dir_string = "LEFTT"
+        return f"{move_string} {dir_string}"
+
     __repr__ = __str__
 
-    @abstractmethod
     def process_one_tick(self, robot):
-        # if self.total_ticks == 0:
-        #     return
-        #
-        # self.tick()
-        # angle = self.angle / self.total_ticks
-        # robot.turn(angle, self.rev)
-        pass
+        if self.total_ticks == 0:
+            return
+
+        self.tick()
+        angle = self.angle / self.total_ticks
+        robot.left_turn(angle, self.rev)
 
     def apply_on_pos(self, curr_pos: Position):
         """
@@ -51,9 +51,9 @@ class TurnCommand(Command):
         assert isinstance(curr_pos, RobotPosition), print("Cannot apply turn command on non-robot positions!")
         # print(curr_pos.angle, self.angle)
         # Get change in (x, y) coordinate.
-        x_change = const.ROBOT_TURN_RADIUS * (math.sin(math.radians(curr_pos.angle + self.angle)) -
+        x_change = const.ROBOT_LEFT_TURN_RADIUS * (math.sin(math.radians(curr_pos.angle + self.angle)) -
                                               math.sin(math.radians(curr_pos.angle)))
-        y_change = const.ROBOT_TURN_RADIUS * (math.cos(math.radians(curr_pos.angle + self.angle)) -
+        y_change = const.ROBOT_LEFT_TURN_RADIUS * (math.cos(math.radians(curr_pos.angle + self.angle)) -
                                               math.cos(math.radians(curr_pos.angle)))
 
         if self.angle < 0 and not self.rev:  # Wheels to right moving forward.

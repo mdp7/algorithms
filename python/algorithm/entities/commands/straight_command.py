@@ -19,7 +19,7 @@ class StraightCommand(Command):
         # return f"StraightCommand(dist={self.dist / const.SCALING_FACTOR}, {self.total_ticks} ticks)"
         move_string = "FORWARD MOVE" if self.dist >= 0 else "BACKWARD MOVE"
         tmp_dist = int(abs(self.dist / const.SCALING_FACTOR))
-        tmp_dist_adjusted = int(tmp_dist * 0.9)
+        tmp_dist_adjusted = int(tmp_dist * 1)
         return f"{move_string} {tmp_dist_adjusted}"
     __repr__ = __str__
     

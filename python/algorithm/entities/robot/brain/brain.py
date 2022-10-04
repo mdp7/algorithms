@@ -4,6 +4,8 @@ from collections import deque
 from typing import Tuple
 
 from algorithm import const
+from algorithm.entities.commands.left_command import LeftTurn
+from algorithm.entities.commands.right_command import RightTurn
 from algorithm.entities.commands.scan_command import ScanCommand
 from algorithm.entities.commands.straight_command import StraightCommand
 from algorithm.entities.commands.turn_command import TurnCommand
@@ -71,7 +73,6 @@ class Brain:
         new_commands = deque()
         while index < len(self.commands):
             command = self.commands[index]
-            time += command.time * 5
             if isinstance(command, StraightCommand):
                 # print("Straight Command ticks: ", command.time)
                 new_length = 0
@@ -79,25 +80,33 @@ class Brain:
                     new_length += self.commands[index].dist
                     index += 1
                     total_distance += 10
-                    time += command.time
+                    time += command.time * 5
                 command = StraightCommand(new_length)
                 new_commands.append(command)
             else:
                 new_commands.append(command)
                 index += 1
                 if isinstance(command, TurnCommand):
-                    # print("Turn Command ticks: ", command.total_ticks)
-                    # print((const.ROBOT_TURN_RADIUS)//const.SCALING_FACTOR * math.pi/2)
-                    total_distance += (const.ROBOT_TURN_RADIUS) // const.SCALING_FACTOR * math.pi / 2
+                    if isinstance(command, LeftTurn):
+                        turn_amt = (const.ROBOT_LEFT_TURN_RADIUS) // const.SCALING_FACTOR * math.pi / 2
+                        time += command.time * 5
+                    elif isinstance(command, RightTurn):
+                        turn_amt = (const.ROBOT_RIGHT_TURN_RADIUS) // const.SCALING_FACTOR * math.pi / 2
+                        time += command.time * 5
+                    else:
+                        turn_amt = 0
+                        time += command.time * 20
+                    total_distance += turn_amt
+
 
         # print("\n", new_commands)
-        for c in new_commands:
-            print(c, end=",")
+        # for c in new_commands:
+        #     print(c, end=",")
 
         print()
         # print(new_commands)
         self.commands = new_commands
-        print(f"Done! Distance Travelled: {total_distance}cm  Time taken: {time}s")
+        # print(f"Done! Distance Travelled: {total_distance}cm  Time taken: {time}s")
 
     def plan_path(self):
         print("-" * 40)
@@ -108,7 +117,7 @@ class Brain:
         curr = self.robot.pos.copy()  # We use a copy rather than get a reference.
         for obstacle in self.simple_hamiltonian:
             target = obstacle.get_robot_target_pos()
-            print(f"Planning {curr} to {target}")
+            # print(f"Planning {curr} to {target}")
             res = ModifiedAStar(self.grid, self, curr, target).start_astar()
             if res is None:
                 print(f"\tNo path found from {curr} to {obstacle}")
