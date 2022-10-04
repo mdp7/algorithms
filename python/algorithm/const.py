@@ -9,7 +9,8 @@ OBSTACLE_LAYOUT = [
     [[25, 185, -90], [125, 185, -90], [105, 25, 180], [15, 115, -90], [125, 85, 180]],
     [[15, 125, -90], [45, 185, -90], [115, 185, -90], [175, 115, 180], [115, 45, 90]],
     [[165, 145, 90], [165, 65, -90], [45, 75, 0], [35, 145, 0]],
-    [[65, 65, -90], [155, 75, 180], [155, 135, 180], [45, 165, 0]]#, [65, 115, 180]]
+    [[65, 65, -90], [155, 75, 180], [155, 135, 180], [45, 165, 0]],#, [65, 115, 180]]
+    [[65, 165, -90], [175, 145, 180], [175, 95, 180], [95, 85, 90], [115, 175, -90], [145, 15, 0], [75, 15, 180], [105, 15, 90]]
 ]
 
 # PyGame settings
@@ -50,7 +51,7 @@ GRID_NUM_GRIDS = GRID_LENGTH // GRID_CELL_LENGTH
 # Obstacle Attributes
 OBSTACLE_LENGTH = 10 * SCALING_FACTOR
 # OBSTACLE_SAFETY_WIDTH = ROBOT_SAFETY_DISTANCE // 3 * 4  # With respect to the center of the obstacle
-OBSTACLE_SAFETY_WIDTH = 25 * SCALING_FACTOR
+OBSTACLE_SAFETY_WIDTH = 21 * SCALING_FACTOR
 OBSTACLE_TARGET_OFFSET = 0 * SCALING_FACTOR
 
 # Path Finding Attributes

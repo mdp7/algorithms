@@ -44,11 +44,11 @@ class Brain:
             for i in range(len(targets) - 1):
                 delta = abs(targets[i].angle - targets[i + 1].angle)
                 if delta == 180:
-                    mul = 4
-                elif delta == 0:
                     mul = 2
+                elif delta == 0:
+                    mul = 1.2
                 else:
-                    mul = 3
+                    mul = 1
                 dist += mul * math.sqrt(((targets[i].xy_pygame()[0] - targets[i + 1].xy_pygame()[0]) ** 2) +
                                         ((targets[i].xy_pygame()[1] - targets[i + 1].xy_pygame()[1]) ** 2))
             return dist
@@ -120,9 +120,9 @@ class Brain:
             # print(f"Planning {curr} to {target}")
             res = ModifiedAStar(self.grid, self, curr, target).start_astar()
             if res is None:
-                print(f"\tNo path found from {curr} to {obstacle}")
+                print(f"\tNo path found from {curr} to {target}")
             else:
-                print("\tPath found.")
+                print(f"\tPath found from {curr} to {target}.")
                 curr = res
                 self.commands.append(ScanCommand(const.ROBOT_SCAN_TIME, obstacle.index))
         self.compress_paths()
