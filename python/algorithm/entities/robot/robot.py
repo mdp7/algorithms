@@ -84,8 +84,8 @@ class Robot:
 
     def right_turn(self, d_angle, rev):
         RightTurn(d_angle, rev).apply_on_pos(self.pos)
-    def tptTurn(self, d_angle, rev):
-        TPTCommand(d_angle, rev).apply_on_pos(self.pos)
+    def tptTurn(self, d_angle, rev, ticks):
+        TPTCommand(d_angle, rev).apply_on_pos(self.pos, ticks)
 
     def straight(self, dist):
         """

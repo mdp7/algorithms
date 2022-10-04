@@ -14,7 +14,6 @@ class TPTCommand(TurnCommand):
         Note that negative angles will always result in the robot being rotated clockwise.
         """
         super().__init__(angle, rev)
-
         self.angle = angle
         self.rev = rev
 
@@ -34,9 +33,9 @@ class TPTCommand(TurnCommand):
 
         self.tick()
         angle = self.angle / self.total_ticks
-        robot.tptTurn(angle, self.rev)
+        robot.tptTurn(angle, self.rev, self.ticks)
 
-    def apply_on_pos(self, curr_pos: Position):
+    def apply_on_pos(self, curr_pos: Position, ticks):
         """
         x_new = x + R(sin(∆θ + θ) − sin θ)
         y_new = y − R(cos(∆θ + θ) − cos θ)
@@ -52,17 +51,28 @@ class TPTCommand(TurnCommand):
         assert isinstance(curr_pos, RobotPosition), print("Cannot apply turn command on non-robot positions!")
         # x_change = 0
         # y_change = 0
-        #
-        # if self.angle < 0 and not self.rev:  # Wheels to right moving forward.
-        #     curr_pos.x -= x_change
-        #     curr_pos.y += y_change
-        # elif (self.angle < 0 and self.rev) or (self.angle >= 0 and not self.rev):
-        #     # (Wheels to left moving backwards) or (Wheels to left moving forwards).
-        #     curr_pos.x += x_change
-        #     curr_pos.y -= y_change
-        # else:  # Wheels to right moving backwards.
-        #     curr_pos.x -= x_change
-        #     curr_pos.y += y_change
+
+        x_change = const.ROBOT_TURN_RADIUS * (math.sin(math.radians(curr_pos.angle + self.angle)) -
+                                              math.sin(math.radians(curr_pos.angle)))
+        y_change = const.ROBOT_TURN_RADIUS * (math.cos(math.radians(curr_pos.angle + self.angle)) -
+                                              math.cos(math.radians(curr_pos.angle)))
+
+        if ticks >= 20:
+            self.rev = False
+        else:
+            self.rev = True
+
+        if self.angle < 0 and not self.rev:  # Wheels to right moving forward.
+            curr_pos.x -= x_change
+            curr_pos.y += y_change
+        elif (self.angle < 0 and self.rev) or (self.angle >= 0 and not self.rev):
+            # (Wheels to left moving backwards) or (Wheels to left moving forwards).
+            curr_pos.x += x_change
+            curr_pos.y -= y_change
+        else:  # Wheels to right moving backwards.
+            curr_pos.x -= x_change
+            curr_pos.y += y_change
+
         curr_pos.angle += self.angle
 
         if curr_pos.angle < -180:

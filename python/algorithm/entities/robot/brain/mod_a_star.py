@@ -59,11 +59,11 @@ class ModifiedAStar:
         turn_penalty = const.PATH_TURN_COST
 
         turn_commands = [
-            # LeftTurn(90, False),  # Forward right turn
+            # LeftTurn(45, False),  # Forward right turn
             # RightTurn(-90, False),  # Forward left turn
-            # RightTurn(90, True),  # Reverse with wheels to right.
+            # RightTurn(45, True),  # Reverse with wheels to right.
             # LeftTurn(-90, True),  # Reverse with wheels to left.
-            TPTCommand(90, False), #3Pt turn Left
+            # TPTCommand(90, False), #3Pt turn Left
             TPTCommand(-90, False) #3Pt turn right
         ]
         for c in turn_commands:
@@ -87,24 +87,35 @@ class ModifiedAStar:
         # Check specifically for validity of turn command.
         p = p.copy()
         if isinstance(command, TurnCommand):
-            if not isinstance(command, TPTCommand):
-                p_c = p.copy()
-                if isinstance(command, LeftTurn):
-                    for tick in range(command.ticks // const.PATH_TURN_CHECK_GRANULARITY):
-                        tick_command = LeftTurn(command.angle / (command.ticks // const.PATH_TURN_CHECK_GRANULARITY),
-                                                   command.rev)
-                        tick_command.apply_on_pos(p_c)
-                        if not (self.grid.check_valid_position(p_c) and self.grid.get_coordinate_node(*p_c.xy())):
-                            return None, None
-                else:
-                    for tick in range(command.ticks // const.PATH_TURN_CHECK_GRANULARITY):
-                        tick_command = RightTurn(command.angle / (command.ticks // const.PATH_TURN_CHECK_GRANULARITY),
-                                                   command.rev)
-                        tick_command.apply_on_pos(p_c)
-                        if not (self.grid.check_valid_position(p_c) and self.grid.get_coordinate_node(*p_c.xy())):
-                            return None, None
+            # if not isinstance(command, TPTCommand):
+            #     p_c = p.copy()
+            #     if isinstance(command, LeftTurn):
+            #         for tick in range(command.ticks // const.PATH_TURN_CHECK_GRANULARITY):
+            #             tick_command = LeftTurn(command.angle / (command.ticks // const.PATH_TURN_CHECK_GRANULARITY),
+            #                                        command.rev)
+            #             tick_command.apply_on_pos(p_c)
+            #             if not (self.grid.check_valid_position(p_c) and self.grid.get_coordinate_node(*p_c.xy())):
+            #                 return None, None
+            #     else:
+            #         for tick in range(command.ticks // const.PATH_TURN_CHECK_GRANULARITY):
+            #             tick_command = RightTurn(command.angle / (command.ticks // const.PATH_TURN_CHECK_GRANULARITY),
+            #                                        command.rev)
+            #             tick_command.apply_on_pos(p_c)
+            #             if not (self.grid.check_valid_position(p_c) and self.grid.get_coordinate_node(*p_c.xy())):
+            #                 return None, None
+            # else:
+            p_c = p.copy()
 
-        command.apply_on_pos(p)
+            for tick in range(command.ticks // const.PATH_TURN_CHECK_GRANULARITY):
+                tick_command = TPTCommand(command.angle / (command.ticks // const.PATH_TURN_CHECK_GRANULARITY),
+                                         command.rev)
+                tick_command.apply_on_pos(p_c, command.ticks)
+                if not (self.grid.check_valid_position(p_c) and self.grid.get_coordinate_node(*p_c.xy())):
+                    return None, None
+            command.apply_on_pos(p, command.ticks)
+
+        else:
+            command.apply_on_pos(p)
         if self.grid.check_valid_position(p) and (after := self.grid.get_coordinate_node(*p.xy())):
             after.pos.direction = p.direction
             return after.copy(), p
