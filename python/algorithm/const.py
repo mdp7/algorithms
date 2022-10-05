@@ -55,13 +55,13 @@ GRID_NUM_GRIDS = GRID_LENGTH // GRID_CELL_LENGTH
 # Obstacle Attributes
 OBSTACLE_LENGTH = 10 * SCALING_FACTOR
 # OBSTACLE_SAFETY_WIDTH = ROBOT_SAFETY_DISTANCE // 3 * 4  # With respect to the center of the obstacle
-OBSTACLE_SAFETY_WIDTH = 20 * SCALING_FACTOR
-OBSTACLE_TARGET_OFFSET = 0 * SCALING_FACTOR
+OBSTACLE_SAFETY_WIDTH = 19 * SCALING_FACTOR
+OBSTACLE_TARGET_OFFSET = 1 * SCALING_FACTOR
 
 # Path Finding Attributes
 PATH_TURN_COST = 999 * ROBOT_SPEED_PER_SECOND * ROBOT_TURN_RADIUS
 
-TPT_MUL = 5
+TPT_MUL = 100
 
 # NOTE: Higher number == Lower Granularity == Faster Checking.
 # Must be an integer more than 0! Number higher than 3 not recommended.
