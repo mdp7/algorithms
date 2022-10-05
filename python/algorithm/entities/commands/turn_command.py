@@ -16,6 +16,8 @@ class TurnCommand(Command):
         time = abs((math.radians(angle) * const.ROBOT_LENGTH) /
                    (const.ROBOT_SPEED_PER_SECOND * const.ROBOT_S_FACTOR))
         super().__init__(time)
+        self.ticks = 40
+        self.total_ticks = 40
 
         self.angle = angle
         self.rev = rev

@@ -74,6 +74,14 @@ class RightTurn(TurnCommand):
             curr_pos.angle -= 2 * 180
 
         # Update the Position's direction.
+        # if 45 <= curr_pos.angle <= 3 * 45:
+        #     curr_pos.direction = Direction.TOP
+        # elif -45 < curr_pos.angle < 45:
+        #     curr_pos.direction = Direction.RIGHT
+        # elif -45 * 3 <= curr_pos.angle <= -45:
+        #     curr_pos.direction = Direction.BOTTOM
+        # else:
+        #     curr_pos.direction = Direction.LEFT
         if 45 <= curr_pos.angle <= 3 * 45:
             curr_pos.direction = Direction.TOP
         elif -45 < curr_pos.angle < 45:

@@ -59,10 +59,12 @@ class ModifiedAStar:
         turn_penalty = const.PATH_TURN_COST
 
         turn_commands = [
+
                 # LeftTurn(90, False),  # Forward right turn
                 # RightTurn(-90, False),  # Forward left turn
                 # RightTurn(90, True),  # Reverse with wheels to right.
                 # LeftTurn(-90, True),  # Reverse with wheels to left.
+
             TPTCommand(90, False), #3Pt turn Left
             TPTCommand(-90, False) #3Pt turn right
         ]
@@ -86,6 +88,7 @@ class ModifiedAStar:
         """
         # Check specifically for validity of turn command.
         p = p.copy()
+
         # if isinstance(command, TurnCommand):
             # if not isinstance(command, TPTCommand):
             #     p_c = p.copy()
@@ -104,6 +107,7 @@ class ModifiedAStar:
             #             if not (self.grid.check_valid_position(p_c) and self.grid.get_coordinate_node(*p_c.xy())):
             #                 return None, None
             # else:
+
         #     p_c = p.copy()
         #
         #     for tick in range(command.ticks // const.PATH_TURN_CHECK_GRANULARITY):
@@ -116,6 +120,7 @@ class ModifiedAStar:
         #
         # else:
         command.apply_on_pos(p)
+
         if self.grid.check_valid_position(p) and (after := self.grid.get_coordinate_node(*p.xy())):
             after.pos.direction = p.direction
             return after.copy(), p

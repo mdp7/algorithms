@@ -14,7 +14,6 @@ class TPTCommand(TurnCommand):
         Note that negative angles will always result in the robot being rotated clockwise.
         """
         super().__init__(angle, rev)
-
         self.angle = angle
         self.rev = rev
 
@@ -34,9 +33,9 @@ class TPTCommand(TurnCommand):
 
         self.tick()
         angle = self.angle / self.total_ticks
-        robot.tptTurn(angle, self.rev)
+        robot.tptTurn(angle, self.rev, self.ticks)
 
-    def apply_on_pos(self, curr_pos: Position):
+    def apply_on_pos(self, curr_pos: Position, ticks):
         """
         x_new = x + R(sin(∆θ + θ) − sin θ)
         y_new = y − R(cos(∆θ + θ) − cos θ)
@@ -52,6 +51,16 @@ class TPTCommand(TurnCommand):
         assert isinstance(curr_pos, RobotPosition), print("Cannot apply turn command on non-robot positions!")
         # x_change = 0
         # y_change = 0
+
+        # x_change = const.ROBOT_TURN_RADIUS * (math.sin(math.radians(curr_pos.angle + self.angle)) -
+        #                                       math.sin(math.radians(curr_pos.angle)))
+        # y_change = const.ROBOT_TURN_RADIUS * (math.cos(math.radians(curr_pos.angle + self.angle)) -
+        #                                       math.cos(math.radians(curr_pos.angle)))
+        #
+        # if ticks >= 20:
+        #     self.rev = False
+        # else:
+        #     self.rev = True
         #
         # if self.angle < 0 and not self.rev:  # Wheels to right moving forward.
         #     curr_pos.x -= x_change
@@ -63,6 +72,7 @@ class TPTCommand(TurnCommand):
         # else:  # Wheels to right moving backwards.
         #     curr_pos.x -= x_change
         #     curr_pos.y += y_change
+
         curr_pos.angle += self.angle
 
         if curr_pos.angle < -180:
@@ -80,7 +90,58 @@ class TPTCommand(TurnCommand):
         else:
             curr_pos.direction = Direction.LEFT
         return self
+    def apply_on_pos_check(self, curr_pos: Position, ticks):
+        """
+        x_new = x + R(sin(∆θ + θ) − sin θ)
+        y_new = y − R(cos(∆θ + θ) − cos θ)
+        θ_new = θ + ∆θ
+        R is the turning radius.
 
+        Take note that:
+            - +ve ∆θ -> rotate counter-clockwise
+            - -ve ∆θ -> rotate clockwise
+
+        Note that ∆θ is in radians.
+        """
+        assert isinstance(curr_pos, RobotPosition), print("Cannot apply turn command on non-robot positions!")
+        # x_change = 0
+        # y_change = 0
+        if ticks >= 30:
+            self.rev = False
+            self.rev = False
+            x_change = const.ROBOT_TPT_TURN_RADIUS * (math.sin(math.radians(curr_pos.angle + self.angle)) -
+                                                  math.sin(math.radians(curr_pos.angle)))
+            y_change = const.ROBOT_TPT_TURN_RADIUS * (math.cos(math.radians(curr_pos.angle + self.angle)) -
+                                                  math.cos(math.radians(curr_pos.angle)))
+
+            if self.angle < 0 and not self.rev:  # Wheels to right moving forward.
+                curr_pos.x -= x_change
+                curr_pos.y += y_change
+            elif (self.angle < 0 and self.rev) or (self.angle >= 0 and not self.rev):
+                # (Wheels to left moving backwards) or (Wheels to left moving forwards).
+                curr_pos.x += x_change
+                curr_pos.y -= y_change
+            else:  # Wheels to right moving backwards.
+                curr_pos.x -= x_change
+                curr_pos.y += y_change
+
+            curr_pos.angle += self.angle
+
+            if curr_pos.angle < -180:
+                curr_pos.angle += 2 * 180
+            elif curr_pos.angle >= 180:
+                curr_pos.angle -= 2 * 180
+
+            # Update the Position's direction.
+            if 45 <= curr_pos.angle <= 3 * 45:
+                curr_pos.direction = Direction.TOP
+            elif -45 < curr_pos.angle < 45:
+                curr_pos.direction = Direction.RIGHT
+            elif -45 * 3 <= curr_pos.angle <= -45:
+                curr_pos.direction = Direction.BOTTOM
+            else:
+                curr_pos.direction = Direction.LEFT
+        return self
     def convert_to_message(self):
         if self.angle > 0 and not self.rev:
             # This is going forward left.
