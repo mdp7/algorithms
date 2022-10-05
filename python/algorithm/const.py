@@ -12,13 +12,14 @@ OBSTACLE_LAYOUT = [
     [[15, 125, -90], [45, 185, -90], [115, 185, -90], [175, 115, 180], [115, 45, 90]],
     [[165, 145, 90], [165, 65, -90], [45, 75, 0], [35, 145, 0]],
     [[65, 65, -90], [155, 75, 180], [155, 135, 180], [45, 165, 0]],#, [65, 115, 180]]
-    [[65, 165, -90], [175, 145, 180], [175, 95, 180], [95, 85, 90], [115, 175, -90], [145, 15, 0], [75, 15, 180], [105, 15, 90]]
+    [[65, 165, -90], [175, 145, 180], [175, 95, 180], [95, 85, 90], [115, 175, -90], [145, 15, 0], [75, 15, 180], [105, 15, 90]],
+    [[15, 185, -90], [65, 125, 90], [195, 95, 180], [105, 65, 0], [145, 25, 0]]
 ]
 
 # PyGame settings
 SCALING_FACTOR = 4
 FRAMES = 60
-WINDOW_SIZE = 800, 800
+WINDOW_SIZE = 850, 850
 
 # Connection to RPi
 RPI_HOST: str = "192.168.8.8"
@@ -55,7 +56,7 @@ GRID_NUM_GRIDS = GRID_LENGTH // GRID_CELL_LENGTH
 # Obstacle Attributes
 OBSTACLE_LENGTH = 10 * SCALING_FACTOR
 # OBSTACLE_SAFETY_WIDTH = ROBOT_SAFETY_DISTANCE // 3 * 4  # With respect to the center of the obstacle
-OBSTACLE_SAFETY_WIDTH = 20 * SCALING_FACTOR
+OBSTACLE_SAFETY_WIDTH = 25 * SCALING_FACTOR
 OBSTACLE_TARGET_OFFSET = 0 * SCALING_FACTOR
 
 # Path Finding Attributes
