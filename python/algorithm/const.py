@@ -1,5 +1,7 @@
 import socket
 
+from algorithm.entities.assets.direction import Direction
+
 # Obstacle Layout
 OBSTACLE_LAYOUT = [
     [[55, 75, -90], [55, 135, 180], [125, 95, 0], [155, 45, 90], [155, 155, -90]],
@@ -39,8 +41,9 @@ ROBOT_S_FACTOR = ROBOT_LENGTH / ROBOT_TURN_RADIUS  # Please read briefing notes 
 ROBOT_SAFETY_DISTANCE = 15 * SCALING_FACTOR
 ROBOT_SCAN_TIME = 0.25  # Time provided for scanning an obstacle image in seconds.
 
-ROBOT_CUSTOM_START_X = 105 * SCALING_FACTOR
-ROBOT_CUSTOM_START_Y = 25 * SCALING_FACTOR
+ROBOT_CUSTOM_START_X = 15
+ROBOT_CUSTOM_START_Y = 15
+ROBOT_CUSTOM_START_DIR = Direction.TOP
 
 
 # Grid Attributes
@@ -58,7 +61,7 @@ OBSTACLE_TARGET_OFFSET = 0 * SCALING_FACTOR
 # Path Finding Attributes
 PATH_TURN_COST = 999 * ROBOT_SPEED_PER_SECOND * ROBOT_TURN_RADIUS
 
-TPT_MUL = 1.05
+TPT_MUL = 5
 
 # NOTE: Higher number == Lower Granularity == Faster Checking.
 # Must be an integer more than 0! Number higher than 3 not recommended.

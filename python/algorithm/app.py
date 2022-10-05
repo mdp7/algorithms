@@ -14,7 +14,8 @@ from algorithm.entities.robot.robot import Robot
 class AlgoApp(ABC):
     def __init__(self, obstacles: List[Obstacle]):
         self.grid = Grid(obstacles)
-        self.default_robot_start = Robot(15, 15, Direction.TOP, self.grid)
+        self.default_robot_start =  Robot(const.ROBOT_CUSTOM_START_X, const.ROBOT_CUSTOM_START_X, \
+                                       const.ROBOT_CUSTOM_START_DIR, self.grid)
         self.robot = self.default_robot_start
         self.direction = Direction.TOP
         self.obstacles = obstacles
@@ -117,7 +118,8 @@ class AlgoSimulator(AlgoApp):
                     text_rect.center = const.WINDOW_SIZE[0] / 2, const.WINDOW_SIZE[1] / 2
                     self.screen.blit(text, text_rect)
                     pygame.display.flip()
-                    self.robot = Robot(15, 15, Direction.TOP, self.grid)
+                    self.robot = Robot(const.ROBOT_CUSTOM_START_X, const.ROBOT_CUSTOM_START_X, \
+                                       const.ROBOT_CUSTOM_START_DIR, self.grid)
                     # self.robot = self.default_robot_start
                     # Calculate the path.
                     self.robot.brain.plan_path()
