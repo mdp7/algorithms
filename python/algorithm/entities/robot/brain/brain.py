@@ -76,7 +76,8 @@ class Brain:
             if isinstance(command, StraightCommand):
                 # print("Straight Command ticks: ", command.time)
                 new_length = 0
-                while index < len(self.commands) and isinstance(self.commands[index], StraightCommand):
+                while index < len(self.commands) and isinstance(self.commands[index], StraightCommand): \
+                        #and new_length/const.SCALING_FACTOR < 80:
                     new_length += self.commands[index].dist
                     index += 1
                     total_distance += 10
